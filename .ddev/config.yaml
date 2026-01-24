@@ -1,6 +1,6 @@
 name: recipeboxx
-type: php
-docroot: ""
+type: drupal
+docroot: web
 php_version: "8.3"
 webserver_type: nginx-fpm
 xdebug_enabled: false
@@ -291,3 +291,7 @@ corepack_enable: false
 # information on the commands that can be extended and the tasks you can define
 # for them. Example:
 #hooks:
+# post-import-db:
+#   - exec: drush sql:sanitize
+#   - exec: drush updatedb
+#   - exec: drush cache:rebuild
