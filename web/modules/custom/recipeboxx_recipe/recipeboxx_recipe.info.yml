@@ -1,0 +1,12 @@
+name: Recipe Box
+type: module
+description: 'Recipe management with import and sharing features'
+package: Custom
+core_version_requirement: ^11
+dependencies:
+  - drupal:node
+  - drupal:field
+  - drupal:taxonomy
+  - drupal:media
+  - drupal:link
+  - drupal:views

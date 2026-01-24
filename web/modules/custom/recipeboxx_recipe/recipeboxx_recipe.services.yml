@@ -1,0 +1,21 @@
+services:
+  recipeboxx_recipe.schema_parser:
+    class: Drupal\recipeboxx_recipe\Service\SchemaOrgParser
+    arguments: ['@http_client']
+
+  recipeboxx_recipe.ai_parser:
+    class: Drupal\recipeboxx_recipe\Service\AiFallbackParser
+
+  recipeboxx_recipe.scraper:
+    class: Drupal\recipeboxx_recipe\Service\RecipeScraperService
+    arguments:
+      - '@recipeboxx_recipe.schema_parser'
+      - '@recipeboxx_recipe.ai_parser'
+
+  recipeboxx_recipe.clone_service:
+    class: Drupal\recipeboxx_recipe\Service\RecipeCloneService
+
+  recipeboxx_recipe.clone_access_check:
+    class: Drupal\recipeboxx_recipe\Access\RecipeCloneAccessCheck
+    tags:
+      - { name: access_check, applies_to: _custom_access }

@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Recipe Tags'
+vid: recipe_tags
+description: 'Free-form tags for recipes'
+weight: 0

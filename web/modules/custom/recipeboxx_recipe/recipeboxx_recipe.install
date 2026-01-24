@@ -1,0 +1,99 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Recipe Box module.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+
+/**
+ * Implements hook_install().
+ */
+function recipeboxx_recipe_install() {
+  // Set default permissions for authenticated users
+  $permissions = [
+    'create recipe content',
+    'edit own recipe content',
+    'delete own recipe content',
+    'view public recipes',
+    'clone public recipes',
+    'import recipes from url',
+  ];
+
+  user_role_grant_permissions('authenticated', $permissions);
+
+  // Create default taxonomy terms for cuisines
+  $cuisine_types = [
+    'Italian',
+    'Mexican',
+    'Chinese',
+    'Japanese',
+    'Indian',
+    'Thai',
+    'French',
+    'Mediterranean',
+    'American',
+    'Greek',
+  ];
+
+  foreach ($cuisine_types as $name) {
+    Term::create([
+      'vid' => 'cuisine_type',
+      'name' => $name,
+    ])->save();
+  }
+
+  // Create default taxonomy terms for meal types
+  $meal_types = [
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Dessert',
+    'Snack',
+    'Appetizer',
+    'Side Dish',
+    'Beverage',
+  ];
+
+  foreach ($meal_types as $name) {
+    Term::create([
+      'vid' => 'meal_type',
+      'name' => $name,
+    ])->save();
+  }
+
+  // Create default taxonomy terms for dietary restrictions
+  $dietary_restrictions = [
+    'Vegetarian',
+    'Vegan',
+    'Gluten-Free',
+    'Dairy-Free',
+    'Keto',
+    'Paleo',
+    'Low-Carb',
+    'Nut-Free',
+  ];
+
+  foreach ($dietary_restrictions as $name) {
+    Term::create([
+      'vid' => 'dietary_restriction',
+      'name' => $name,
+    ])->save();
+  }
+
+  \Drupal::messenger()->addStatus(t('Recipe Box module installed successfully! You can now start creating and importing recipes.'));
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function recipeboxx_recipe_uninstall() {
+  // Remove configuration
+  \Drupal::configFactory()->getEditable('recipeboxx_recipe.settings')->delete();
+
+  // Clean up node access table
+  \Drupal::database()->delete('node_access')
+    ->condition('realm', 'recipeboxx_%', 'LIKE')
+    ->execute();
+}

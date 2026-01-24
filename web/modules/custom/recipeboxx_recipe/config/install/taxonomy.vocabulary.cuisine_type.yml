@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Cuisine Type'
+vid: cuisine_type
+description: 'Types of cuisine (Italian, Mexican, Asian, etc.)'
+weight: 0

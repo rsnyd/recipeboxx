@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Meal Type'
+vid: meal_type
+description: 'Type of meal (Breakfast, Lunch, Dinner, Dessert, etc.)'
+weight: 0

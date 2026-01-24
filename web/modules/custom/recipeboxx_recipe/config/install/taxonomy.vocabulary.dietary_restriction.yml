@@ -1,0 +1,7 @@
+langcode: en
+status: true
+dependencies: {  }
+name: 'Dietary Restriction'
+vid: dietary_restriction
+description: 'Dietary restrictions and preferences (Vegetarian, Vegan, Gluten-Free, etc.)'
+weight: 0

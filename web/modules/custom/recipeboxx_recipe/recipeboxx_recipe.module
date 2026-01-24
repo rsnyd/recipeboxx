@@ -1,0 +1,30 @@
+<?php
+
+/**
+ * @file
+ * Recipe Box module file.
+ *
+ * Provides recipe management with URL import and sharing capabilities.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function recipeboxx_recipe_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    case 'help.page.recipeboxx_recipe':
+      $output = '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('The Recipe Box module provides comprehensive recipe management with the following features:') . '</p>';
+      $output .= '<ul>';
+      $output .= '<li>' . t('Create, edit, and delete personal recipes') . '</li>';
+      $output .= '<li>' . t('Import recipes from URLs using Schema.org parsing') . '</li>';
+      $output .= '<li>' . t('AI-powered fallback for sites without structured data') . '</li>';
+      $output .= '<li>' . t('Public/Private recipe visibility control') . '</li>';
+      $output .= '<li>' . t('Clone public recipes from other users') . '</li>';
+      $output .= '<li>' . t('Organize recipes with categories and tags') . '</li>';
+      $output .= '</ul>';
+      return $output;
+  }
+}

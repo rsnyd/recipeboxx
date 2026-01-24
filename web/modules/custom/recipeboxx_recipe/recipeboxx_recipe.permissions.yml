@@ -1,0 +1,23 @@
+create recipe content:
+  title: 'Create new recipes'
+  description: 'Allow users to create their own recipes'
+
+edit own recipe content:
+  title: 'Edit own recipes'
+  description: 'Allow users to edit their own recipes'
+
+delete own recipe content:
+  title: 'Delete own recipes'
+  description: 'Allow users to delete their own recipes'
+
+view public recipes:
+  title: 'View public recipes'
+  description: 'Allow users to view recipes marked as public'
+
+clone public recipes:
+  title: 'Clone public recipes'
+  description: 'Allow users to clone public recipes to their collection'
+
+import recipes from url:
+  title: 'Import recipes from URL'
+  description: 'Allow users to import recipes by pasting URLs'

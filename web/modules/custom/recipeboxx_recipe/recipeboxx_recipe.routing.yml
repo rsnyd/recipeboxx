@@ -1,0 +1,28 @@
+recipeboxx_recipe.import:
+  path: '/recipe/import'
+  defaults:
+    _form: '\Drupal\recipeboxx_recipe\Form\RecipeImportForm'
+    _title: 'Import Recipe from URL'
+  requirements:
+    _permission: 'import recipes from url'
+
+recipeboxx_recipe.clone:
+  path: '/recipe/{node}/clone'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCloneController::clone'
+    _title: 'Clone Recipe'
+  requirements:
+    _custom_access: '\Drupal\recipeboxx_recipe\Access\RecipeCloneAccessCheck::access'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.settings:
+  path: '/admin/config/recipeboxx/settings'
+  defaults:
+    _form: '\Drupal\recipeboxx_recipe\Form\RecipeSettingsForm'
+    _title: 'Recipe Box Settings'
+  requirements:
+    _permission: 'administer site configuration'

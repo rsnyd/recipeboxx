@@ -16,7 +16,8 @@
       "Bash(git pull:*)",
       "Bash(ddev composer:*)",
       "Bash(ddev restart:*)",
-      "Bash(ddev drush:*)"
+      "Bash(ddev drush:*)",
+      "Bash(chmod:*)"
     ]
   }
 }

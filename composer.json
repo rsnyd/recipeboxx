@@ -19,9 +19,13 @@
         "drupal/core-composer-scaffold": "^11.0",
         "drupal/core-project-message": "^11.0",
         "drupal/core-recommended": "^11.0",
-        "drush/drush": "^13.0"
-    },
-    "require-dev": {
+        "drupal/field_group": "^4.0",
+        "drupal/pathauto": "^1.14",
+        "drupal/token": "^1.17",
+        "drush/drush": "^13.0",
+        "ml/json-ld": "^1.2",
+        "openai-php/client": "^0.18.0",
+        "symfony/dom-crawler": "^7.4"
     },
     "conflict": {
         "drupal/drupal": "*"
