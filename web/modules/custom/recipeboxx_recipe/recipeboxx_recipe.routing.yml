@@ -6,6 +6,14 @@ recipeboxx_recipe.import:
   requirements:
     _permission: 'import recipes from url'
 
+recipeboxx_recipe.bulk_import:
+  path: '/recipe/bulk-import'
+  defaults:
+    _form: '\Drupal\recipeboxx_recipe\Form\RecipeBulkImportForm'
+    _title: 'Bulk Import Recipes'
+  requirements:
+    _permission: 'import recipes from url'
+
 recipeboxx_recipe.clone:
   path: '/recipe/{node}/clone'
   defaults:

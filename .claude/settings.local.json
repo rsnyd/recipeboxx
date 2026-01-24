@@ -17,7 +17,8 @@
       "Bash(ddev composer:*)",
       "Bash(ddev restart:*)",
       "Bash(ddev drush:*)",
-      "Bash(chmod:*)"
+      "Bash(chmod:*)",
+      "Bash(curl:*)"
     ]
   }
 }
