@@ -23,3 +23,62 @@ Thumbs.db
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Drupal 8 - Configuration files that may contain sensitive information
+/web/sites/*/*settings*.php
+/web/sites/*/*services*.yml
+
+# Drupal 8 - Paths that may contain user-generated content
+/web/sites/*/files
+/web/sites/*/public
+/web/sites/*/private
+/web/sites/*/files-public
+/web/sites/*/files-private
+
+# Drupal 8 - Paths that may contain temporary files
+/web/sites/*/translations
+/web/sites/*/tmp
+/web/sites/*/cache
+
+# Drupal 8 - Drupal core (if not versioning drupal sources)
+/web/vendor
+/web/core
+/web/modules/README.txt
+/web/modules/contrib
+/web/profiles/README.txt
+/web/profiles/contrib
+/web/sites/development.services.yml
+/web/sites/example.settings.local.php
+/web/sites/example.sites.php
+/web/sites/README.txt
+/web/themes/README.txt
+/web/themes/contrib
+/web/.csslintrc
+/web/.editorconfig
+/web/.eslintignore
+/web/.eslintrc.json
+/web/.gitattributes
+/web/.htaccess
+/web/.ht.router.php
+/web/autoload.php
+/web/composer.json
+/web/composer.lock
+/web/example.gitignore
+/web/index.php
+/web/INSTALL.txt
+/web/LICENSE.txt
+/web/README.txt
+/web/robots.txt
+/web/update.php
+/web/web.config
+
+# Vendor dependencies and scripts
+/vendor
+/composer.phar
+/composer
+/robo.phar
+/robo
+/drush.phar
+/drush
+/drupal.phar
+/drupal
