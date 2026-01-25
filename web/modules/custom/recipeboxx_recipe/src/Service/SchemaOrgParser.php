@@ -37,7 +37,7 @@ class SchemaOrgParser {
       // Extract JSON-LD from HTML
       $jsonLd = $this->extractJsonLd($html);
 
-      if ($jsonLd && isset($jsonLd['@type']) && $jsonLd['@type'] === 'Recipe') {
+      if ($jsonLd && $this->isRecipeType($jsonLd)) {
         return $this->mapRecipeData($jsonLd, $url);
       }
 
@@ -62,17 +62,30 @@ class SchemaOrgParser {
    */
   private function extractJsonLd(string $html): ?array {
     // Parse HTML and find script tags with type="application/ld+json"
-    preg_match_all('/<script type="application\/ld\+json">(.*?)<\/script>/is', $html, $matches);
+    // Updated regex to handle script tags with other attributes
+    preg_match_all('/<script[^>]*type=["\']application\/ld\+json["\'][^>]*>(.*?)<\/script>/is', $html, $matches);
 
     foreach ($matches[1] as $json) {
       $data = json_decode($json, TRUE);
-      if (isset($data['@type']) && $data['@type'] === 'Recipe') {
+
+      // Handle array of objects (AllRecipes format)
+      if (is_array($data) && isset($data[0])) {
+        foreach ($data as $item) {
+          if ($this->isRecipeType($item)) {
+            return $item;
+          }
+        }
+      }
+
+      // Handle single object
+      if ($this->isRecipeType($data)) {
         return $data;
       }
+
       // Handle @graph structure
       if (isset($data['@graph'])) {
         foreach ($data['@graph'] as $item) {
-          if (isset($item['@type']) && $item['@type'] === 'Recipe') {
+          if ($this->isRecipeType($item)) {
             return $item;
           }
         }
@@ -80,6 +93,31 @@ class SchemaOrgParser {
     }
 
     return NULL;
+  }
+
+  /**
+   * Check if data is a Recipe type.
+   *
+   * @param mixed $data
+   *   The data to check.
+   *
+   * @return bool
+   *   TRUE if it's a Recipe type.
+   */
+  private function isRecipeType($data): bool {
+    if (!isset($data['@type'])) {
+      return FALSE;
+    }
+
+    $type = $data['@type'];
+
+    // Handle array of types (e.g., ["Recipe", "NewsArticle"])
+    if (is_array($type)) {
+      return in_array('Recipe', $type);
+    }
+
+    // Handle single type
+    return $type === 'Recipe';
   }
 
   /**

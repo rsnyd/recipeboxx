@@ -6,11 +6,17 @@
  */
 
 use Drupal\taxonomy\Entity\Term;
+use Drupal\node\Entity\NodeType;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_install().
  */
 function recipeboxx_recipe_install() {
+  // Create Recipe content type and fields
+  _recipeboxx_recipe_create_content_type();
+
   // Set default permissions for authenticated users
   $permissions = [
     'create recipe content',
@@ -83,6 +89,264 @@ function recipeboxx_recipe_install() {
   }
 
   \Drupal::messenger()->addStatus(t('Recipe Box module installed successfully! You can now start creating and importing recipes.'));
+}
+
+/**
+ * Helper function to create Recipe content type and fields.
+ */
+function _recipeboxx_recipe_create_content_type() {
+  // Create Recipe content type
+  $type = NodeType::create([
+    'type' => 'recipe',
+    'name' => 'Recipe',
+    'description' => 'A recipe with ingredients, instructions, and metadata.',
+  ]);
+  $type->save();
+
+  // Define all fields with their configurations
+  $fields = [
+    'field_ingredients' => [
+      'type' => 'text_long',
+      'label' => 'Ingredients',
+      'description' => 'List of ingredients (one per line)',
+      'required' => TRUE,
+    ],
+    'field_prep_time' => [
+      'type' => 'integer',
+      'label' => 'Prep Time',
+      'description' => 'Preparation time in minutes',
+      'settings' => ['min' => 0],
+    ],
+    'field_cook_time' => [
+      'type' => 'integer',
+      'label' => 'Cook Time',
+      'description' => 'Cooking time in minutes',
+      'settings' => ['min' => 0],
+    ],
+    'field_total_time' => [
+      'type' => 'integer',
+      'label' => 'Total Time',
+      'description' => 'Total time in minutes (auto-calculated)',
+      'settings' => ['min' => 0],
+    ],
+    'field_servings' => [
+      'type' => 'integer',
+      'label' => 'Servings',
+      'description' => 'Number of servings',
+      'settings' => ['min' => 1],
+    ],
+    'field_calories' => [
+      'type' => 'integer',
+      'label' => 'Calories',
+      'description' => 'Calories per serving',
+      'settings' => ['min' => 0],
+    ],
+    'field_protein' => [
+      'type' => 'integer',
+      'label' => 'Protein',
+      'description' => 'Protein in grams per serving',
+      'settings' => ['min' => 0],
+    ],
+    'field_carbohydrates' => [
+      'type' => 'integer',
+      'label' => 'Carbohydrates',
+      'description' => 'Carbohydrates in grams per serving',
+      'settings' => ['min' => 0],
+    ],
+    'field_fat' => [
+      'type' => 'integer',
+      'label' => 'Fat',
+      'description' => 'Fat in grams per serving',
+      'settings' => ['min' => 0],
+    ],
+    'field_fiber' => [
+      'type' => 'integer',
+      'label' => 'Fiber',
+      'description' => 'Fiber in grams per serving',
+      'settings' => ['min' => 0],
+    ],
+    'field_source_url' => [
+      'type' => 'link',
+      'label' => 'Source URL',
+      'description' => 'Original recipe URL',
+      'settings' => ['link_type' => 1],
+    ],
+    'field_source_author' => [
+      'type' => 'string',
+      'label' => 'Source Author',
+      'description' => 'Original recipe author',
+    ],
+    'field_source_site' => [
+      'type' => 'string',
+      'label' => 'Source Site',
+      'description' => 'Original website name',
+    ],
+    'field_recipe_visibility' => [
+      'type' => 'list_string',
+      'label' => 'Visibility',
+      'description' => 'Who can see this recipe',
+      'required' => TRUE,
+      'settings' => [
+        'allowed_values' => [
+          'private' => 'Private (only me)',
+          'public' => 'Public (everyone)',
+        ],
+      ],
+      'default_value' => [['value' => 'private']],
+    ],
+    'field_clone_count' => [
+      'type' => 'integer',
+      'label' => 'Clone Count',
+      'description' => 'Number of times this recipe has been cloned',
+      'settings' => ['min' => 0],
+      'default_value' => [['value' => 0]],
+    ],
+  ];
+
+  // Create field storage and field instances
+  foreach ($fields as $field_name => $config) {
+    // Create field storage if it doesn't exist
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!$field_storage) {
+      $storage_config = [
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => $config['type'],
+        'cardinality' => 1,
+      ];
+
+      if (isset($config['settings'])) {
+        $storage_config['settings'] = $config['settings'];
+      }
+
+      FieldStorageConfig::create($storage_config)->save();
+    }
+
+    // Create field instance
+    $field = FieldConfig::loadByName('node', 'recipe', $field_name);
+    if (!$field) {
+      $field_config = [
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'recipe',
+        'label' => $config['label'],
+        'description' => $config['description'] ?? '',
+        'required' => $config['required'] ?? FALSE,
+      ];
+
+      if (isset($config['default_value'])) {
+        $field_config['default_value'] = $config['default_value'];
+      }
+
+      FieldConfig::create($field_config)->save();
+    }
+  }
+
+  // Create entity reference fields for taxonomy
+  $taxonomy_fields = [
+    'field_cuisine_type' => [
+      'label' => 'Cuisine Type',
+      'vocabulary' => 'cuisine_type',
+    ],
+    'field_meal_type' => [
+      'label' => 'Meal Type',
+      'vocabulary' => 'meal_type',
+    ],
+    'field_dietary_restrictions' => [
+      'label' => 'Dietary Restrictions',
+      'vocabulary' => 'dietary_restriction',
+      'cardinality' => -1,
+    ],
+    'field_recipe_tags' => [
+      'label' => 'Tags',
+      'vocabulary' => 'recipe_tags',
+      'cardinality' => -1,
+    ],
+  ];
+
+  foreach ($taxonomy_fields as $field_name => $config) {
+    // Create field storage if it doesn't exist
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!$field_storage) {
+      FieldStorageConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => 'entity_reference',
+        'cardinality' => $config['cardinality'] ?? 1,
+        'settings' => [
+          'target_type' => 'taxonomy_term',
+        ],
+      ])->save();
+    }
+
+    // Create field instance
+    $field = FieldConfig::loadByName('node', 'recipe', $field_name);
+    if (!$field) {
+      FieldConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'recipe',
+        'label' => $config['label'],
+        'settings' => [
+          'handler' => 'default:taxonomy_term',
+          'handler_settings' => [
+            'target_bundles' => [
+              $config['vocabulary'] => $config['vocabulary'],
+            ],
+          ],
+        ],
+      ])->save();
+    }
+  }
+
+  // Create entity reference field for original recipe (clone tracking)
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_original_recipe');
+  if (!$field_storage) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_original_recipe',
+      'entity_type' => 'node',
+      'type' => 'entity_reference',
+      'cardinality' => 1,
+      'settings' => [
+        'target_type' => 'node',
+      ],
+    ])->save();
+  }
+
+  $field = FieldConfig::loadByName('node', 'recipe', 'field_original_recipe');
+  if (!$field) {
+    FieldConfig::create([
+      'field_name' => 'field_original_recipe',
+      'entity_type' => 'node',
+      'bundle' => 'recipe',
+      'label' => 'Original Recipe',
+      'description' => 'If this is a cloned recipe, reference to the original',
+      'settings' => [
+        'handler' => 'default:node',
+        'handler_settings' => [
+          'target_bundles' => [
+            'recipe' => 'recipe',
+          ],
+        ],
+      ],
+    ])->save();
+  }
+
+  // Configure form and display settings
+  $entity_form_display = \Drupal::service('entity_display.repository')->getFormDisplay('node', 'recipe', 'default');
+  $entity_form_display->setComponent('field_ingredients', ['type' => 'text_textarea'])
+    ->setComponent('field_prep_time', ['type' => 'number'])
+    ->setComponent('field_cook_time', ['type' => 'number'])
+    ->setComponent('field_servings', ['type' => 'number'])
+    ->setComponent('field_recipe_visibility', ['type' => 'options_buttons'])
+    ->save();
+
+  // Configure view display
+  $entity_view_display = \Drupal::service('entity_display.repository')->getViewDisplay('node', 'recipe', 'default');
+  $entity_view_display->setComponent('field_ingredients', ['type' => 'text_default'])
+    ->setComponent('field_prep_time', ['type' => 'number_integer'])
+    ->setComponent('field_cook_time', ['type' => 'number_integer'])
+    ->save();
 }
 
 /**
