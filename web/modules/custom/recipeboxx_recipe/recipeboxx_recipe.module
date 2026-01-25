@@ -106,6 +106,28 @@ function recipeboxx_recipe_theme($existing, $type, $theme, $path) {
       ],
       'template' => 'recipeboxx-meal-plan-overview',
     ],
+    'recipeboxx_recipe_cooking_mode' => [
+      'variables' => [
+        'node' => NULL,
+        'steps' => [],
+        'scaled_data' => NULL,
+      ],
+      'template' => 'recipeboxx-recipe-cooking-mode',
+    ],
+    'recipeboxx_recipe_card' => [
+      'variables' => [
+        'node' => NULL,
+        'scaled_data' => NULL,
+      ],
+      'template' => 'recipeboxx-recipe-card',
+    ],
+    'recipeboxx_collection_view' => [
+      'variables' => [
+        'collection' => NULL,
+        'recipes' => [],
+      ],
+      'template' => 'recipeboxx-collection-view',
+    ],
   ];
 }
 

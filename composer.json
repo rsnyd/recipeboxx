@@ -16,9 +16,11 @@
     ],
     "require": {
         "composer/installers": "^2.0",
+        "dompdf/dompdf": "^2.0",
         "drupal/core-composer-scaffold": "^11.0",
         "drupal/core-project-message": "^11.0",
         "drupal/core-recommended": "^11.0",
+        "drupal/entity_print": "^2.14",
         "drupal/facets": "^3.0",
         "drupal/field_group": "^4.0",
         "drupal/metatag": "^2.0",
@@ -27,6 +29,7 @@
         "drupal/token": "^1.17",
         "drush/drush": "^13.0",
         "ml/json-ld": "^1.2",
+        "moontoast/math": "^1.2",
         "openai-php/client": "^0.18.0",
         "symfony/dom-crawler": "^7.4"
     },

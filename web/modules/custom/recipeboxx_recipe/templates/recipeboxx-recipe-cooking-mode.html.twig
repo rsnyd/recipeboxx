@@ -1,0 +1,112 @@
+{#
+/**
+ * @file
+ * Template for cooking mode interface.
+ *
+ * Available variables:
+ * - node: The recipe node entity.
+ * - steps: Array of instruction steps with timing data.
+ * - scaled_data: Optional scaled recipe data.
+ */
+#}
+<div class="cooking-mode" data-recipe-id="{{ node.id }}">
+  <div class="cooking-mode-header">
+    <h1>{{ node.title }}</h1>
+    <div class="cooking-mode-actions">
+      <button class="button exit-cooking-mode">{{ 'Exit Cooking Mode'|t }}</button>
+    </div>
+  </div>
+
+  {% if scaled_data %}
+    <div class="cooking-mode-scaled-info">
+      <p>{{ 'Scaled to @servings servings (from @original)'|t({
+        '@servings': scaled_data.new_servings,
+        '@original': scaled_data.original_servings
+      }) }}</p>
+    </div>
+  {% endif %}
+
+  <div class="cooking-mode-layout">
+    <div class="cooking-mode-sidebar">
+      <div class="cooking-mode-ingredients">
+        <h2>{{ 'Ingredients'|t }}</h2>
+        {% if scaled_data %}
+          <ul class="ingredient-list">
+            {% for ingredient in scaled_data.ingredients %}
+              <li>
+                <label>
+                  <input type="checkbox" class="ingredient-checkbox">
+                  <span>{{ ingredient }}</span>
+                </label>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          {{ node.field_ingredients.value|raw }}
+        {% endif %}
+      </div>
+
+      <div class="cooking-mode-timers">
+        <h2>{{ 'Active Timers'|t }}</h2>
+        <div id="active-timers"></div>
+      </div>
+    </div>
+
+    <div class="cooking-mode-main">
+      <div class="cooking-mode-progress">
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+        </div>
+        <div class="progress-text">
+          <span id="current-step-num">1</span> / <span id="total-steps">{{ steps|length }}</span>
+        </div>
+      </div>
+
+      <div class="cooking-mode-steps">
+        {% for step in steps %}
+          <div class="cooking-step {% if loop.first %}active{% endif %}"
+               data-step-number="{{ step.number }}"
+               id="step-{{ step.number }}">
+            <div class="step-header">
+              <span class="step-number">{{ step.number }}</span>
+              <h3>{{ 'Step @num'|t({'@num': step.number}) }}</h3>
+            </div>
+
+            <div class="step-content">
+              <p>{{ step.text }}</p>
+            </div>
+
+            {% if step.timers %}
+              <div class="step-timers">
+                {% for timer in step.timers %}
+                  <button class="button button--small start-timer"
+                          data-duration="{{ timer.seconds }}"
+                          data-label="{{ timer.label }}">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zM7 4h2v5H7V4zm1 7a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                    </svg>
+                    {{ 'Start @duration timer'|t({'@duration': timer.label}) }}
+                  </button>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            <div class="step-actions">
+              {% if not loop.first %}
+                <button class="button button--secondary prev-step">{{ 'Previous'|t }}</button>
+              {% endif %}
+
+              <button class="button mark-complete">{{ 'Mark Complete'|t }}</button>
+
+              {% if not loop.last %}
+                <button class="button button--primary next-step">{{ 'Next Step'|t }}</button>
+              {% else %}
+                <button class="button button--primary finish-cooking">{{ 'Finish Cooking'|t }}</button>
+              {% endif %}
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,254 @@
+/**
+ * @file
+ * Styles for meal planning interface.
+ */
+
+.meal-plan-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 15px;
+  padding: 20px;
+  background: #f9f9f9;
+}
+
+.meal-plan-day {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.day-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 15px;
+  margin: 0;
+  font-size: 18px;
+  text-align: center;
+}
+
+.meal-slot {
+  padding: 10px;
+  min-height: 100px;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background 0.2s ease;
+}
+
+.meal-slot:last-child {
+  border-bottom: none;
+}
+
+.meal-slot.drop-hover {
+  background: #e3f2fd;
+  border: 2px dashed #2196f3;
+}
+
+.meal-label {
+  font-weight: bold;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #666;
+  margin-bottom: 8px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.meal-slot--breakfast .meal-label {
+  color: #ff9800;
+}
+
+.meal-slot--lunch .meal-label {
+  color: #4caf50;
+}
+
+.meal-slot--dinner .meal-label {
+  color: #2196f3;
+}
+
+.meal-slot--snack .meal-label {
+  color: #9c27b0;
+}
+
+.meal-recipes {
+  min-height: 60px;
+}
+
+.meal-recipe-card {
+  background: #f5f5f5;
+  padding: 8px;
+  margin: 5px 0;
+  border-radius: 4px;
+  border-left: 3px solid #4caf50;
+  cursor: move;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meal-recipe-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.meal-recipe-card.dragging {
+  opacity: 0.5;
+}
+
+.drag-helper {
+  background: white;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.meal-empty {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  padding: 20px 10px;
+  cursor: pointer;
+}
+
+.meal-empty:hover {
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 4px;
+}
+
+.meal-plan-actions {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.meal-plans-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.meal-plan-summary {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.meal-plan-summary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.meal-plan-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.meal-plan-title:hover {
+  color: #667eea;
+}
+
+.meal-plan-stats {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.meal-plan-date {
+  color: #999;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.meal-plan-overview {
+  padding: 20px;
+}
+
+.meal-plan-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 10000;
+  max-width: 400px;
+  width: 90%;
+}
+
+.meal-plan-modal h3 {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+}
+
+.meal-plan-modal .form-item {
+  margin-bottom: 20px;
+}
+
+.meal-plan-modal label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.meal-plan-modal select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.modal-actions .button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.modal-actions .button--primary {
+  background: #4caf50;
+  color: white;
+}
+
+.modal-actions .button--primary:hover {
+  background: #45a049;
+}
+
+@media (max-width: 1200px) {
+  .meal-plan-week-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .meal-plan-week-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .meal-plan-week-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -51,3 +51,21 @@ administer meal plans:
   title: 'Administer meal plans'
   description: 'Administer all meal plans'
   restrict access: true
+
+# Collection permissions
+create recipe collections:
+  title: 'Create recipe collections'
+  description: 'Create and manage recipe collections/cookbooks'
+
+edit own recipe collections:
+  title: 'Edit own recipe collections'
+  description: 'Edit own recipe collections'
+
+view public collections:
+  title: 'View public recipe collections'
+  description: 'View recipe collections marked as public'
+
+administer recipe collections:
+  title: 'Administer recipe collections'
+  description: 'Administer all recipe collections'
+  restrict access: true

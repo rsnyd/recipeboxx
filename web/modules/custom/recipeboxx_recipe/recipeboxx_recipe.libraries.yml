@@ -29,3 +29,54 @@ search:
   dependencies:
     - core/drupal
     - core/jquery
+
+# Library for cooking mode
+cooking-mode:
+  version: 1.0
+  css:
+    theme:
+      css/cooking-mode.css: {}
+  js:
+    js/cooking-mode.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+# Library for meal planner
+meal-planner:
+  version: 1.0
+  css:
+    theme:
+      css/meal-planner.css: {}
+  js:
+    js/meal-planner-dragdrop.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.ui
+    - core/drupal.dialog
+
+# Library for shopping list
+shopping-list:
+  version: 1.0
+  css:
+    theme:
+      css/shopping-list.css: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+# Library for shopping list print view
+shopping-list-print:
+  version: 1.0
+  css:
+    theme:
+      css/shopping-list.css: {}
+  dependencies:
+    - core/drupal
+
+# Library for recipe card
+recipe-card:
+  version: 1.0
+  dependencies:
+    - core/drupal

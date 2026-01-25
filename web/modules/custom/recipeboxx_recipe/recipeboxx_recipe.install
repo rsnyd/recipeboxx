@@ -28,6 +28,9 @@ function recipeboxx_recipe_install() {
     'create recipe notes',
     'create shopping lists',
     'create meal plans',
+    'create recipe collections',
+    'edit own recipe collections',
+    'view public collections',
   ];
 
   user_role_grant_permissions('authenticated', $permissions);
@@ -674,6 +677,102 @@ function recipeboxx_recipe_schema() {
     'indexes' => [
       'plan_id' => ['plan_id'],
       'day_meal' => ['day_of_week', 'meal_type'],
+    ],
+  ];
+
+  // Recipe collections table
+  $schema['recipeboxx_collection'] = [
+    'description' => 'Stores recipe collections/cookbooks',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'description' => [
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'visibility' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'private',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'changed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'uid' => ['uid'],
+      'visibility' => ['visibility'],
+    ],
+  ];
+
+  // Collection items table
+  $schema['recipeboxx_collection_item'] = [
+    'description' => 'Stores recipes in collections',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'collection_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Collection ID',
+      ],
+      'recipe_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Recipe node ID',
+      ],
+      'weight' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'added' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+      'collection_recipe' => ['collection_id', 'recipe_id'],
+    ],
+    'indexes' => [
+      'collection_id' => ['collection_id'],
+      'recipe_id' => ['recipe_id'],
     ],
   ];
 

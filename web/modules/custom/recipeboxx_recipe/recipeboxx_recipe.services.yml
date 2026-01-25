@@ -43,3 +43,17 @@ services:
   recipeboxx_recipe.meal_plan:
     class: Drupal\recipeboxx_recipe\Service\MealPlanService
     arguments: ['@entity_type.manager', '@current_user', '@recipeboxx_recipe.shopping_list']
+
+  # Phase 3: Recipe Collections Service
+  recipeboxx_recipe.collection:
+    class: Drupal\recipeboxx_recipe\Service\RecipeCollectionService
+    arguments: ['@entity_type.manager', '@current_user']
+
+  # Phase 5: Advanced Features Services
+  recipeboxx_recipe.scaling:
+    class: Drupal\recipeboxx_recipe\Service\RecipeScalingService
+    arguments: ['@recipeboxx_recipe.ingredient_parser']
+
+  recipeboxx_recipe.export:
+    class: Drupal\recipeboxx_recipe\Service\RecipeExportService
+    arguments: ['@entity_type.manager', '@file_system', '@logger.factory', '@recipeboxx_recipe.scaling']

@@ -1,0 +1,89 @@
+{#
+/**
+ * @file
+ * Template for 4x6 recipe card printing.
+ *
+ * Available variables:
+ * - node: The recipe node entity.
+ * - scaled_data: Optional scaled recipe data.
+ */
+#}
+<div class="recipe-card" style="width: 6in; height: 4in; padding: 0.25in; box-sizing: border-box;">
+  <div class="recipe-card-header">
+    <h1 style="font-size: 18pt; margin: 0 0 4pt 0;">{{ node.title }}</h1>
+
+    <div class="recipe-card-meta" style="font-size: 8pt; color: #666; margin-bottom: 6pt;">
+      {% if node.field_servings.value %}
+        <span>{{ 'Serves: @servings'|t({'@servings': scaled_data ? scaled_data.new_servings : node.field_servings.value}) }}</span>
+      {% endif %}
+
+      {% if node.field_prep_time.value or node.field_cook_time.value %}
+        <span style="margin-left: 8pt;">
+          {% if node.field_prep_time.value %}
+            {{ 'Prep: @time min'|t({'@time': node.field_prep_time.value}) }}
+          {% endif %}
+          {% if node.field_cook_time.value %}
+            {{ 'Cook: @time min'|t({'@time': node.field_cook_time.value}) }}
+          {% endif %}
+        </span>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="recipe-card-body" style="display: flex; gap: 8pt; font-size: 9pt;">
+    <div class="recipe-card-ingredients" style="flex: 1; border-right: 1pt solid #ddd; padding-right: 8pt;">
+      <h2 style="font-size: 11pt; margin: 0 0 4pt 0; font-weight: bold;">{{ 'Ingredients'|t }}</h2>
+
+      {% if scaled_data %}
+        <ul style="margin: 0; padding-left: 12pt; list-style: none;">
+          {% for ingredient in scaled_data.ingredients %}
+            <li style="margin-bottom: 2pt;">{{ ingredient }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <div style="margin: 0;">
+          {{ node.field_ingredients.value|raw }}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="recipe-card-instructions" style="flex: 1.5;">
+      <h2 style="font-size: 11pt; margin: 0 0 4pt 0; font-weight: bold;">{{ 'Instructions'|t }}</h2>
+
+      <div style="font-size: 8pt; line-height: 1.3;">
+        {% if scaled_data %}
+          {{ scaled_data.instructions|striptags|nl2br }}
+        {% else %}
+          {{ node.field_instructions.value|striptags|nl2br }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="recipe-card-footer" style="margin-top: 6pt; padding-top: 4pt; border-top: 1pt solid #ddd; font-size: 7pt; color: #888;">
+    <div style="display: flex; justify-content: space-between;">
+      <span>{{ 'From: @site'|t({'@site': 'RecipeBoxx'}) }}</span>
+      {% if node.field_source_url.uri %}
+        <span>{{ 'Source: @url'|t({'@url': node.field_source_url.uri|truncate(40)}) }}</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+  @media print {
+    @page {
+      size: 6in 4in;
+      margin: 0;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .recipe-card {
+      page-break-after: always;
+    }
+  }
+</style>

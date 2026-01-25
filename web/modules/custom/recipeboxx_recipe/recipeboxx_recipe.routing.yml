@@ -279,3 +279,173 @@ recipeboxx_recipe.meal_plan_generate_list:
     parameters:
       meal_plan:
         type: 'entity:meal_plan'
+
+# Phase 3: Recipe Collection Routes
+recipeboxx_recipe.collections:
+  path: '/my/collections'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCollectionController::listCollections'
+    _title: 'My Recipe Collections'
+  requirements:
+    _permission: 'create recipe collections'
+
+recipeboxx_recipe.collections_public:
+  path: '/collections/browse'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCollectionController::browsePublicCollections'
+    _title: 'Browse Public Collections'
+  requirements:
+    _permission: 'view public collections'
+
+entity.recipe_collection.canonical:
+  path: '/collection/{recipe_collection}'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCollectionController::viewCollection'
+    _title_callback: '\Drupal\recipeboxx_recipe\Entity\RecipeCollection::getName'
+  requirements:
+    _entity_access: 'recipe_collection.view'
+  options:
+    parameters:
+      recipe_collection:
+        type: 'entity:recipe_collection'
+
+entity.recipe_collection.add_form:
+  path: '/collection/add'
+  defaults:
+    _entity_form: 'recipe_collection.add'
+    _title: 'Create Collection'
+  requirements:
+    _permission: 'create recipe collections'
+
+entity.recipe_collection.edit_form:
+  path: '/collection/{recipe_collection}/edit'
+  defaults:
+    _entity_form: 'recipe_collection.edit'
+    _title: 'Edit Collection'
+  requirements:
+    _entity_access: 'recipe_collection.update'
+  options:
+    parameters:
+      recipe_collection:
+        type: 'entity:recipe_collection'
+
+entity.recipe_collection.delete_form:
+  path: '/collection/{recipe_collection}/delete'
+  defaults:
+    _entity_form: 'recipe_collection.delete'
+    _title: 'Delete Collection'
+  requirements:
+    _entity_access: 'recipe_collection.delete'
+  options:
+    parameters:
+      recipe_collection:
+        type: 'entity:recipe_collection'
+
+recipeboxx_recipe.collection_add_recipe:
+  path: '/recipe/{node}/add-to-collection'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCollectionController::addToCollection'
+  requirements:
+    _permission: 'create recipe collections'
+    _csrf_token: 'TRUE'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.collection_remove_recipe:
+  path: '/collection/{recipe_collection}/remove/{node}'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeCollectionController::removeFromCollection'
+  requirements:
+    _entity_access: 'recipe_collection.update'
+    _csrf_token: 'TRUE'
+    node: \d+
+  options:
+    parameters:
+      recipe_collection:
+        type: 'entity:recipe_collection'
+      node:
+        type: entity:node
+
+# Phase 5: Cooking Mode Routes
+recipeboxx_recipe.cooking_mode:
+  path: '/recipe/{node}/cooking-mode'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\CookingModeController::cookingMode'
+    _title: 'Cooking Mode'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+    no_cache: TRUE
+
+# Phase 5: Recipe Export Routes
+recipeboxx_recipe.export_options:
+  path: '/recipe/{node}/export'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeExportController::exportOptions'
+    _title: 'Export Recipe'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.export_json:
+  path: '/recipe/{node}/export/json'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeExportController::exportJson'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.export_jsonld:
+  path: '/recipe/{node}/export/jsonld'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeExportController::exportJsonLd'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.export_card:
+  path: '/recipe/{node}/export/card'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeExportController::exportCard'
+    _title: 'Recipe Card'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+    no_cache: TRUE
+
+# Phase 5: Recipe Scaling Routes
+recipeboxx_recipe.scale:
+  path: '/recipe/{node}/scale'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeScaleController::scale'
+  requirements:
+    _entity_access: 'node.view'
+    _csrf_token: 'TRUE'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node

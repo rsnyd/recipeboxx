@@ -1,0 +1,352 @@
+/**
+ * @file
+ * Styles for shopping list interface.
+ */
+
+.shopping-lists-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+
+.shopping-list-summary {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.shopping-list-summary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.shopping-list-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.shopping-list-title:hover {
+  color: #4caf50;
+}
+
+.shopping-list-stats {
+  color: #666;
+  font-size: 14px;
+  margin: 10px 0;
+}
+
+.shopping-list-date {
+  color: #999;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+.shopping-list-actions {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shopping-list-items {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shopping-list-category {
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.shopping-list-category > summary {
+  padding: 15px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.shopping-list-category > summary:hover {
+  background: #e0e0e0;
+}
+
+.shopping-list-category[open] > summary {
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 4px 4px 0 0;
+}
+
+.shopping-list-category-items {
+  list-style: none;
+  padding: 15px;
+  margin: 0;
+}
+
+.shopping-list-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.shopping-list-item:last-child {
+  border-bottom: none;
+}
+
+.shopping-list-item:hover {
+  background: #f9f9f9;
+  padding-left: 5px;
+}
+
+.shopping-list-item.checked {
+  opacity: 0.6;
+}
+
+.shopping-list-item .item-checkbox {
+  margin-right: 12px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.shopping-list-item .item-text {
+  flex: 1;
+  font-size: 16px;
+}
+
+.shopping-list-item.checked .item-text {
+  text-decoration: line-through;
+  color: #999;
+}
+
+/* Print styles */
+@media print {
+  .shopping-list-actions,
+  .button,
+  .item-checkbox {
+    display: none !important;
+  }
+
+  .shopping-list-items {
+    box-shadow: none;
+    border: none;
+  }
+
+  .shopping-list-category {
+    page-break-inside: avoid;
+  }
+
+  .shopping-list-item {
+    padding: 8px 0;
+  }
+
+  .shopping-list-item::before {
+    content: '☐ ';
+    font-size: 18px;
+    margin-right: 8px;
+  }
+
+  .shopping-list-item.checked::before {
+    content: '☑ ';
+  }
+
+  .shopping-list-item .item-text {
+    font-size: 14px;
+  }
+}
+
+/* Shopping list print view */
+.shopping-list-print {
+  max-width: 8.5in;
+  margin: 0 auto;
+  padding: 0.5in;
+  font-family: Arial, sans-serif;
+}
+
+.shopping-list-print h1 {
+  font-size: 24pt;
+  margin-bottom: 20pt;
+  border-bottom: 2pt solid #333;
+  padding-bottom: 10pt;
+}
+
+.shopping-list-print .category-section {
+  page-break-inside: avoid;
+  margin-bottom: 20pt;
+}
+
+.shopping-list-print .category-title {
+  font-size: 16pt;
+  font-weight: bold;
+  margin: 15pt 0 10pt 0;
+  color: #4caf50;
+}
+
+.shopping-list-print .item-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shopping-list-print .item-list li {
+  padding: 6pt 0;
+  border-bottom: 1pt solid #e0e0e0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.shopping-list-print .item-list li::before {
+  content: '☐';
+  font-size: 14pt;
+  margin-right: 10pt;
+  flex-shrink: 0;
+}
+
+.shopping-list-print .item-list li:last-child {
+  border-bottom: none;
+}
+
+/* Add to shopping list button on recipe pages */
+.add-to-shopping-list {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.2s ease;
+}
+
+.add-to-shopping-list:hover {
+  background: #45a049;
+}
+
+.add-to-shopping-list svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Shopping list selection modal */
+.shopping-list-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  z-index: 10000;
+  max-width: 500px;
+  width: 90%;
+}
+
+.shopping-list-modal h3 {
+  margin: 0 0 20px 0;
+  font-size: 24px;
+}
+
+.shopping-list-modal .list-options {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-bottom: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+}
+
+.shopping-list-modal .list-option {
+  padding: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.shopping-list-modal .list-option:last-child {
+  border-bottom: none;
+}
+
+.shopping-list-modal .list-option:hover {
+  background: #f5f5f5;
+}
+
+.shopping-list-modal .list-option.selected {
+  background: #e3f2fd;
+  border-left: 3px solid #2196f3;
+}
+
+.shopping-list-modal .or-divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #999;
+  position: relative;
+}
+
+.shopping-list-modal .or-divider::before,
+.shopping-list-modal .or-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #e0e0e0;
+}
+
+.shopping-list-modal .or-divider::before {
+  left: 0;
+}
+
+.shopping-list-modal .or-divider::after {
+  right: 0;
+}
+
+.shopping-list-modal .create-new {
+  margin-bottom: 20px;
+}
+
+.shopping-list-modal input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.shopping-list-modal .modal-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.shopping-list-modal .modal-actions .button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .shopping-lists-container {
+    grid-template-columns: 1fr;
+  }
+}
