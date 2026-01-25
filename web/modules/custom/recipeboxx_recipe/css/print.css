@@ -1,0 +1,155 @@
+/**
+ * @file
+ * Print-specific styles for recipe printing.
+ */
+
+/* Screen styles for print view page */
+@media screen {
+  body.path-recipe-print {
+    max-width: 8.5in;
+    margin: 0 auto;
+    padding: 0.5in;
+    font-family: Georgia, 'Times New Roman', serif;
+    background: #fff;
+  }
+
+  .recipe-print {
+    background: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 1in;
+  }
+}
+
+/* Print styles */
+@media print {
+  /* Hide everything except recipe content */
+  body * {
+    visibility: hidden;
+  }
+
+  .recipe-print,
+  .recipe-print * {
+    visibility: visible;
+  }
+
+  .recipe-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Typography */
+  .recipe-print {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+  }
+
+  .recipe-print__title {
+    font-size: 24pt;
+    font-weight: bold;
+    margin-bottom: 0.5in;
+    border-bottom: 2pt solid #000;
+    padding-bottom: 0.15in;
+  }
+
+  h2 {
+    font-size: 14pt;
+    font-weight: bold;
+    margin-top: 0.3in;
+    margin-bottom: 0.15in;
+    border-bottom: 1pt solid #333;
+  }
+
+  /* Layout */
+  .recipe-print__metadata {
+    display: flex;
+    gap: 0.25in;
+    margin-bottom: 0.3in;
+    padding: 0.15in;
+    background: #f5f5f5;
+    border: 1pt solid #ccc;
+  }
+
+  .recipe-print__timing,
+  .recipe-print__nutrition {
+    flex: 1;
+  }
+
+  .recipe-print__ingredients {
+    margin-bottom: 0.3in;
+    page-break-inside: avoid;
+  }
+
+  .ingredient-list {
+    line-height: 1.8;
+    margin-left: 0.25in;
+  }
+
+  .recipe-print__instructions {
+    margin-bottom: 0.3in;
+  }
+
+  .instruction-text {
+    line-height: 1.6;
+  }
+
+  /* Images */
+  .recipe-print__images {
+    max-height: 3in;
+    margin-bottom: 0.25in;
+    page-break-inside: avoid;
+  }
+
+  .recipe-print__images img {
+    max-width: 100%;
+    max-height: 3in;
+    height: auto;
+  }
+
+  /* Footer */
+  .recipe-print__footer {
+    margin-top: 0.3in;
+    padding-top: 0.15in;
+    border-top: 1pt solid #ccc;
+    font-size: 10pt;
+  }
+
+  .recipe-print__categories,
+  .recipe-print__source {
+    margin-bottom: 0.15in;
+  }
+
+  .recipe-print__attribution {
+    margin-top: 0.2in;
+    font-style: italic;
+    color: #666;
+    text-align: center;
+  }
+
+  /* Print optimization */
+  .recipe-print__ingredients,
+  .recipe-print__instructions {
+    orphans: 3;
+    widows: 3;
+  }
+
+  /* Avoid page breaks in specific sections */
+  .recipe-print__timing,
+  .recipe-print__nutrition,
+  .nutrition-label {
+    page-break-inside: avoid;
+  }
+
+  /* Links - show URL for source */
+  a[href]:after {
+    content: none;
+  }
+
+  .recipe-print__source a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+  }
+}

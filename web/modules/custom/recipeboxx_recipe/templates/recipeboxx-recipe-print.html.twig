@@ -1,0 +1,142 @@
+{#
+/**
+ * @file
+ * Template for printing recipes with customizable sections.
+ *
+ * Available variables:
+ * - node: The recipe node entity
+ * - selected_sections: Array of section identifiers to include
+ */
+#}
+
+{% set show_timing = 'timing' in selected_sections %}
+{% set show_nutrition = 'nutrition' in selected_sections %}
+{% set show_source = 'source' in selected_sections %}
+{% set show_categories = 'categories' in selected_sections %}
+{% set show_images = 'images' in selected_sections %}
+
+<article class="recipe-print">
+  {# Header - Always shown #}
+  <header class="recipe-print__header">
+    <h1 class="recipe-print__title">{{ node.label }}</h1>
+
+    {% if show_images and node.field_recipe_images is not empty %}
+      <div class="recipe-print__images">
+        {{ node.field_recipe_images }}
+      </div>
+    {% endif %}
+  </header>
+
+  {# Metadata Section #}
+  {% if show_timing or show_nutrition %}
+    <aside class="recipe-print__metadata">
+      {% if show_timing %}
+        <div class="recipe-print__timing">
+          <h2>Timing</h2>
+          {% if node.field_prep_time.value %}
+            <div><strong>Prep Time:</strong> {{ node.field_prep_time.value }} minutes</div>
+          {% endif %}
+          {% if node.field_cook_time.value %}
+            <div><strong>Cook Time:</strong> {{ node.field_cook_time.value }} minutes</div>
+          {% endif %}
+          {% if node.field_total_time.value %}
+            <div><strong>Total Time:</strong> {{ node.field_total_time.value }} minutes</div>
+          {% endif %}
+          {% if node.field_servings.value %}
+            <div><strong>Servings:</strong> {{ node.field_servings.value }}</div>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if show_nutrition %}
+        <div class="recipe-print__nutrition">
+          <h2>Nutrition Facts</h2>
+          <div class="nutrition-label">
+            {% if node.field_servings.value %}
+              <div><strong>Per Serving</strong></div>
+            {% endif %}
+            {% if node.field_calories.value %}
+              <div><strong>Calories:</strong> {{ node.field_calories.value }}</div>
+            {% endif %}
+            {% if node.field_protein.value %}
+              <div><strong>Protein:</strong> {{ node.field_protein.value }}g</div>
+            {% endif %}
+            {% if node.field_carbohydrates.value %}
+              <div><strong>Carbohydrates:</strong> {{ node.field_carbohydrates.value }}g</div>
+            {% endif %}
+            {% if node.field_fat.value %}
+              <div><strong>Fat:</strong> {{ node.field_fat.value }}g</div>
+            {% endif %}
+            {% if node.field_fiber.value %}
+              <div><strong>Fiber:</strong> {{ node.field_fiber.value }}g</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endif %}
+    </aside>
+  {% endif %}
+
+  {# Main Content - Always shown #}
+  <main class="recipe-print__content">
+    <section class="recipe-print__ingredients">
+      <h2>Ingredients</h2>
+      <div class="ingredient-list">
+        {{ node.field_ingredients.value|nl2br }}
+      </div>
+    </section>
+
+    <section class="recipe-print__instructions">
+      <h2>Instructions</h2>
+      <div class="instruction-text">
+        {{ node.body.value|raw }}
+      </div>
+    </section>
+  </main>
+
+  {# Footer Sections #}
+  <footer class="recipe-print__footer">
+    {% if show_categories %}
+      <div class="recipe-print__categories">
+        {% if node.field_cuisine_type.entity %}
+          <div><strong>Cuisine:</strong> {{ node.field_cuisine_type.entity.label }}</div>
+        {% endif %}
+        {% if node.field_meal_type.entity %}
+          <div><strong>Meal Type:</strong> {{ node.field_meal_type.entity.label }}</div>
+        {% endif %}
+        {% if node.field_dietary_restrictions is not empty %}
+          <div><strong>Dietary:</strong>
+            {% for item in node.field_dietary_restrictions %}
+              {{ item.entity.label }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% if node.field_recipe_tags is not empty %}
+          <div><strong>Tags:</strong>
+            {% for item in node.field_recipe_tags %}
+              {{ item.entity.label }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if show_source %}
+      <div class="recipe-print__source">
+        <h2>Source</h2>
+        {% if node.field_source_author.value %}
+          <div><strong>Author:</strong> {{ node.field_source_author.value }}</div>
+        {% endif %}
+        {% if node.field_source_site.value %}
+          <div><strong>Site:</strong> {{ node.field_source_site.value }}</div>
+        {% endif %}
+        {% if node.field_source_url.0.url %}
+          <div><strong>URL:</strong> {{ node.field_source_url.0.url }}</div>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="recipe-print__attribution">
+      <p><em>Printed from Recipe Box on {{ "now"|date("F j, Y") }}</em></p>
+    </div>
+  </footer>
+</article>

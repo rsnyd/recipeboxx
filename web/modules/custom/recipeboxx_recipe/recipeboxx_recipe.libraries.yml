@@ -1,0 +1,31 @@
+# Library for print link trigger on recipe pages
+print-trigger:
+  version: 1.0
+  js:
+    js/print-trigger.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+
+# Library for print view page
+print:
+  version: 1.0
+  css:
+    theme:
+      css/print.css: {}
+  js:
+    js/print.js: {}
+  dependencies:
+    - core/drupal
+
+# Library for search functionality
+search:
+  version: 1.0
+  css:
+    theme:
+      css/search.css: {}
+  js:
+    js/search.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery

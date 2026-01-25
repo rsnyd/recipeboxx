@@ -28,3 +28,90 @@ function recipeboxx_recipe_help($route_name, RouteMatchInterface $route_match) {
       return $output;
   }
 }
+
+/**
+ * Implements hook_theme().
+ */
+function recipeboxx_recipe_theme($existing, $type, $theme, $path) {
+  return [
+    'recipeboxx_recipe_print' => [
+      'variables' => [
+        'node' => NULL,
+        'selected_sections' => [],
+      ],
+      'template' => 'recipeboxx-recipe-print',
+    ],
+    'recipeboxx_nutrition_label' => [
+      'variables' => [
+        'nutrition' => [],
+        'servings' => NULL,
+      ],
+      'template' => 'recipeboxx-nutrition-label',
+    ],
+    'recipeboxx_recipe_search_page' => [
+      'variables' => [
+        'keyword' => '',
+        'filters' => [],
+        'results' => [],
+        'total' => 0,
+        'page' => 0,
+        'per_page' => 20,
+      ],
+      'template' => 'recipeboxx-recipe-search-page',
+    ],
+    'recipeboxx_recipe_search_results' => [
+      'variables' => [
+        'recipes' => [],
+        'keyword' => '',
+      ],
+      'template' => 'recipeboxx-recipe-search-results',
+    ],
+    'recipeboxx_recipe_list' => [
+      'variables' => [
+        'recipes' => [],
+        'title' => '',
+      ],
+      'template' => 'recipeboxx-recipe-list',
+    ],
+    'recipeboxx_shopping_list' => [
+      'variables' => [
+        'shopping_list' => NULL,
+        'items' => [],
+      ],
+      'template' => 'recipeboxx-shopping-list',
+    ],
+    'recipeboxx_shopping_list_overview' => [
+      'variables' => [
+        'lists' => [],
+      ],
+      'template' => 'recipeboxx-shopping-list-overview',
+    ],
+    'recipeboxx_shopping_list_print' => [
+      'variables' => [
+        'shopping_list' => NULL,
+        'items' => [],
+      ],
+      'template' => 'recipeboxx-shopping-list-print',
+    ],
+    'recipeboxx_meal_plan_week' => [
+      'variables' => [
+        'meal_plan' => NULL,
+        'entries' => [],
+      ],
+      'template' => 'recipeboxx-meal-plan-week',
+    ],
+    'recipeboxx_meal_plan_overview' => [
+      'variables' => [
+        'plans' => [],
+      ],
+      'template' => 'recipeboxx-meal-plan-overview',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function recipeboxx_recipe_entity_type_build(array &$entity_types) {
+  // Add custom entity types are already defined via annotations.
+}

@@ -1,0 +1,82 @@
+{#
+/**
+ * @file
+ * Template for displaying nutrition label.
+ *
+ * Available variables:
+ * - nutrition: Nutrition data array with daily values
+ * - servings: Number of servings
+ */
+#}
+<div class="nutrition-label">
+  <div class="nutrition-label__header">
+    <h3 class="nutrition-label__title">{{ 'Nutrition Facts'|t }}</h3>
+    {% if servings %}
+      <p class="nutrition-label__servings">{{ servings }} {{ 'servings per recipe'|t }}</p>
+    {% endif %}
+  </div>
+
+  <div class="nutrition-label__divider nutrition-label__divider--thick"></div>
+
+  <div class="nutrition-label__amount-per-serving">
+    <strong>{{ 'Amount per serving'|t }}</strong>
+  </div>
+
+  <div class="nutrition-label__calories">
+    <div class="nutrition-label__calories-main">
+      <strong>{{ 'Calories'|t }}</strong>
+      <strong class="nutrition-label__value">{{ nutrition.calories|default(0) }}</strong>
+    </div>
+    {% if nutrition.calories_from_fat %}
+      <div class="nutrition-label__calories-from-fat">
+        {{ 'Calories from Fat'|t }} {{ nutrition.calories_from_fat }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="nutrition-label__divider"></div>
+
+  <div class="nutrition-label__daily-value-header">
+    <strong>% {{ 'Daily Value'|t }}*</strong>
+  </div>
+
+  <div class="nutrition-label__nutrients">
+    {% for nutrient in nutrition.nutrients %}
+      <div class="nutrition-label__nutrient{% if nutrient.indent %} nutrition-label__nutrient--indent{% endif %}">
+        <div class="nutrition-label__nutrient-label">
+          {% if not nutrient.indent %}<strong>{% endif %}
+          {{ nutrient.label }}
+          {% if not nutrient.indent %}</strong>{% endif %}
+          {{ nutrient.amount }}{{ nutrient.unit }}
+        </div>
+        {% if nutrient.daily_value is not null %}
+          <div class="nutrition-label__nutrient-daily-value">
+            <strong>{{ nutrient.daily_value }}%</strong>
+          </div>
+        {% endif %}
+      </div>
+      {% if loop.index == 3 or loop.index == 5 %}
+        <div class="nutrition-label__divider"></div>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if nutrition.vitamins_minerals %}
+    <div class="nutrition-label__divider nutrition-label__divider--thick"></div>
+
+    <div class="nutrition-label__vitamins">
+      {% for vitamin in nutrition.vitamins_minerals %}
+        <div class="nutrition-label__vitamin">
+          <span>{{ vitamin.label }} {{ vitamin.amount }}{{ vitamin.unit }}</span>
+          <span>{{ vitamin.daily_value }}%</span>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <div class="nutrition-label__divider"></div>
+
+  <div class="nutrition-label__footer">
+    <p>* {{ 'Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs.'|t }}</p>
+  </div>
+</div>

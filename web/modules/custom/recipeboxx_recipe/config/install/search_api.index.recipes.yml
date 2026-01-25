@@ -1,0 +1,140 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api
+    - node
+id: recipes
+name: 'Recipes'
+description: 'Search index for recipe content'
+read_only: false
+field_settings:
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    boost: 5.0
+  field_description:
+    label: Description
+    datasource_id: 'entity:node'
+    property_path: 'field_description'
+    type: text
+    boost: 3.0
+  field_ingredients:
+    label: Ingredients
+    datasource_id: 'entity:node'
+    property_path: 'field_ingredients'
+    type: text
+    boost: 2.0
+  field_instructions:
+    label: Instructions
+    datasource_id: 'entity:node'
+    property_path: 'field_instructions'
+    type: text
+    boost: 1.0
+  field_cuisine:
+    label: Cuisine
+    datasource_id: 'entity:node'
+    property_path: 'field_cuisine:entity:name'
+    type: string
+  field_dietary_restrictions:
+    label: 'Dietary Restrictions'
+    datasource_id: 'entity:node'
+    property_path: 'field_dietary_restrictions:entity:name'
+    type: string
+  field_recipe_category:
+    label: 'Recipe Category'
+    datasource_id: 'entity:node'
+    property_path: 'field_recipe_category:entity:name'
+    type: string
+  field_prep_time:
+    label: 'Prep Time'
+    datasource_id: 'entity:node'
+    property_path: 'field_prep_time'
+    type: integer
+  field_cook_time:
+    label: 'Cook Time'
+    datasource_id: 'entity:node'
+    property_path: 'field_cook_time'
+    type: integer
+  field_total_time:
+    label: 'Total Time'
+    datasource_id: 'entity:node'
+    property_path: 'field_total_time'
+    type: integer
+  field_rating_average:
+    label: 'Rating Average'
+    datasource_id: 'entity:node'
+    property_path: 'field_rating_average'
+    type: decimal
+  created:
+    label: 'Created'
+    datasource_id: 'entity:node'
+    property_path: created
+    type: date
+  status:
+    label: 'Published'
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - recipe
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -30
+  entity_status: {  }
+  highlight:
+    weights:
+      postprocess_query: -9
+    prefix: '<strong>'
+    suffix: '</strong>'
+  html_filter:
+    weights:
+      preprocess_index: -15
+      preprocess_query: -15
+    all_fields: true
+    title: true
+    alt: true
+    tags:
+      b: 2
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+  ignorecase:
+    weights:
+      preprocess_index: -20
+      preprocess_query: -20
+    all_fields: true
+  rendered_item: {  }
+  stopwords:
+    weights:
+      preprocess_index: -5
+      preprocess_query: -2
+    all_fields: true
+  tokenizer:
+    weights:
+      preprocess_index: -6
+      preprocess_query: -6
+    all_fields: true
+    spaces: '[^\p{L}\p{N}]+'
+    overlap_cjk: 1
+    minimum_word_size: '3'
+tracker_settings:
+  default:
+    indexing_order: fifo
+server: db_server
+options:
+  index_directly: true
+  cron_limit: 50

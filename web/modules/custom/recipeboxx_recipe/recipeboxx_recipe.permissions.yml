@@ -21,3 +21,33 @@ clone public recipes:
 import recipes from url:
   title: 'Import recipes from URL'
   description: 'Allow users to import recipes by pasting URLs'
+
+# Recipe note permissions
+create recipe notes:
+  title: 'Create recipe notes'
+  description: 'Create personal notes for recipes'
+
+administer recipe notes:
+  title: 'Administer recipe notes'
+  description: 'Administer all recipe notes'
+  restrict access: true
+
+# Shopping list permissions
+create shopping lists:
+  title: 'Create shopping lists'
+  description: 'Create and manage personal shopping lists'
+
+administer shopping lists:
+  title: 'Administer shopping lists'
+  description: 'Administer all shopping lists'
+  restrict access: true
+
+# Meal plan permissions
+create meal plans:
+  title: 'Create meal plans'
+  description: 'Create and manage weekly meal plans'
+
+administer meal plans:
+  title: 'Administer meal plans'
+  description: 'Administer all meal plans'
+  restrict access: true

@@ -34,3 +34,248 @@ recipeboxx_recipe.settings:
     _title: 'Recipe Box Settings'
   requirements:
     _permission: 'administer site configuration'
+
+recipeboxx_recipe.print_options:
+  path: '/recipe/{node}/print-options'
+  defaults:
+    _form: '\Drupal\recipeboxx_recipe\Form\RecipePrintOptionsForm'
+    _title: 'Print Options'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.print_view:
+  path: '/recipe/{node}/print'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipePrintController::printView'
+    _title: 'Print Recipe'
+  requirements:
+    _entity_access: 'node.view'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+    no_cache: TRUE
+
+# Phase 1: Search Routes
+recipeboxx_recipe.search:
+  path: '/recipes/search'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeSearchController::searchPage'
+    _title_callback: '\Drupal\recipeboxx_recipe\Controller\RecipeSearchController::searchPageTitle'
+  requirements:
+    _permission: 'access content'
+
+recipeboxx_recipe.popular:
+  path: '/recipes/popular'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeSearchController::popularRecipes'
+    _title: 'Popular Recipes'
+  requirements:
+    _permission: 'access content'
+
+recipeboxx_recipe.recent:
+  path: '/recipes/recent'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeSearchController::recentRecipes'
+    _title: 'Recent Recipes'
+  requirements:
+    _permission: 'access content'
+
+recipeboxx_recipe.top_rated:
+  path: '/recipes/top-rated'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeSearchController::topRatedRecipes'
+    _title: 'Top Rated Recipes'
+  requirements:
+    _permission: 'access content'
+
+recipeboxx_recipe.photo_upload:
+  path: '/recipe/{node}/photos/add'
+  defaults:
+    _form: '\Drupal\recipeboxx_recipe\Form\RecipePhotoUploadForm'
+    _title: 'Upload Recipe Photo'
+  requirements:
+    _entity_access: 'node.update'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+# Phase 2: Recipe Notes Routes
+recipeboxx_recipe.note_view:
+  path: '/recipe/{node}/note'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeNoteController::viewNote'
+    _title: 'My Note'
+  requirements:
+    _permission: 'create recipe notes'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.note_add:
+  path: '/recipe/{node}/note/add'
+  defaults:
+    _entity_form: 'recipe_note.add'
+    _title: 'Add Note'
+  requirements:
+    _permission: 'create recipe notes'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+recipeboxx_recipe.note_edit:
+  path: '/recipe-note/{recipe_note}/edit'
+  defaults:
+    _entity_form: 'recipe_note.edit'
+    _title: 'Edit Note'
+  requirements:
+    _entity_access: 'recipe_note.update'
+  options:
+    parameters:
+      recipe_note:
+        type: 'entity:recipe_note'
+
+# Phase 2: I Made This Routes
+recipeboxx_recipe.made_it_toggle:
+  path: '/recipe/{node}/made-it/toggle'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\RecipeMadeItController::toggle'
+  requirements:
+    _permission: 'access content'
+    _csrf_token: 'TRUE'
+    node: \d+
+  options:
+    parameters:
+      node:
+        type: entity:node
+
+# Phase 4: Shopping List Routes
+recipeboxx_recipe.shopping_lists:
+  path: '/my/shopping-lists'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\ShoppingListController::listShoppingLists'
+    _title: 'My Shopping Lists'
+  requirements:
+    _permission: 'create shopping lists'
+
+recipeboxx_recipe.shopping_list_add:
+  path: '/shopping-list/add'
+  defaults:
+    _entity_form: 'shopping_list.add'
+    _title: 'Create Shopping List'
+  requirements:
+    _permission: 'create shopping lists'
+
+recipeboxx_recipe.shopping_list_view:
+  path: '/shopping-list/{shopping_list}'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\ShoppingListController::viewShoppingList'
+    _title_callback: '\Drupal\recipeboxx_recipe\Entity\ShoppingList::getName'
+  requirements:
+    _entity_access: 'shopping_list.view'
+  options:
+    parameters:
+      shopping_list:
+        type: 'entity:shopping_list'
+
+recipeboxx_recipe.shopping_list_edit:
+  path: '/shopping-list/{shopping_list}/edit'
+  defaults:
+    _entity_form: 'shopping_list.edit'
+    _title: 'Edit Shopping List'
+  requirements:
+    _entity_access: 'shopping_list.update'
+  options:
+    parameters:
+      shopping_list:
+        type: 'entity:shopping_list'
+
+recipeboxx_recipe.shopping_list_delete:
+  path: '/shopping-list/{shopping_list}/delete'
+  defaults:
+    _entity_form: 'shopping_list.delete'
+    _title: 'Delete Shopping List'
+  requirements:
+    _entity_access: 'shopping_list.delete'
+  options:
+    parameters:
+      shopping_list:
+        type: 'entity:shopping_list'
+
+recipeboxx_recipe.shopping_list_print:
+  path: '/shopping-list/{shopping_list}/print'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\ShoppingListController::printShoppingList'
+    _title: 'Print Shopping List'
+  requirements:
+    _entity_access: 'shopping_list.view'
+  options:
+    parameters:
+      shopping_list:
+        type: 'entity:shopping_list'
+    no_cache: TRUE
+
+# Phase 4: Meal Plan Routes
+recipeboxx_recipe.meal_plans:
+  path: '/my/meal-plans'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\MealPlanController::listMealPlans'
+    _title: 'My Meal Plans'
+  requirements:
+    _permission: 'create meal plans'
+
+recipeboxx_recipe.meal_plan_current:
+  path: '/meal-plan/current'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\MealPlanController::currentWeek'
+    _title: 'This Week'
+  requirements:
+    _permission: 'create meal plans'
+
+recipeboxx_recipe.meal_plan_view:
+  path: '/meal-plan/{meal_plan}'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\MealPlanController::viewMealPlan'
+    _title_callback: '\Drupal\recipeboxx_recipe\Entity\MealPlan::getName'
+  requirements:
+    _entity_access: 'meal_plan.view'
+  options:
+    parameters:
+      meal_plan:
+        type: 'entity:meal_plan'
+
+recipeboxx_recipe.meal_plan_edit:
+  path: '/meal-plan/{meal_plan}/edit'
+  defaults:
+    _entity_form: 'meal_plan.edit'
+    _title: 'Edit Meal Plan'
+  requirements:
+    _entity_access: 'meal_plan.update'
+  options:
+    parameters:
+      meal_plan:
+        type: 'entity:meal_plan'
+
+recipeboxx_recipe.meal_plan_generate_list:
+  path: '/meal-plan/{meal_plan}/generate-shopping-list'
+  defaults:
+    _controller: '\Drupal\recipeboxx_recipe\Controller\MealPlanController::generateShoppingList'
+  requirements:
+    _entity_access: 'meal_plan.view'
+    _csrf_token: 'TRUE'
+  options:
+    parameters:
+      meal_plan:
+        type: 'entity:meal_plan'

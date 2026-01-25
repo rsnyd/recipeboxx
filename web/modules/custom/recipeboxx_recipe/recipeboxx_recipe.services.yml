@@ -19,3 +19,27 @@ services:
     class: Drupal\recipeboxx_recipe\Access\RecipeCloneAccessCheck
     tags:
       - { name: access_check, applies_to: _custom_access }
+
+  # Phase 1: Search and Nutrition Services
+  recipeboxx_recipe.search:
+    class: Drupal\recipeboxx_recipe\Service\RecipeSearchService
+    arguments: ['@entity_type.manager']
+
+  recipeboxx_recipe.nutrition_calculator:
+    class: Drupal\recipeboxx_recipe\Service\NutritionCalculatorService
+
+  # Phase 2: Social Features Services
+  recipeboxx_recipe.share:
+    class: Drupal\recipeboxx_recipe\Service\RecipeShareService
+
+  # Phase 4: Shopping Lists and Meal Planning Services
+  recipeboxx_recipe.ingredient_parser:
+    class: Drupal\recipeboxx_recipe\Service\IngredientParserService
+
+  recipeboxx_recipe.shopping_list:
+    class: Drupal\recipeboxx_recipe\Service\ShoppingListService
+    arguments: ['@entity_type.manager', '@current_user', '@recipeboxx_recipe.ingredient_parser']
+
+  recipeboxx_recipe.meal_plan:
+    class: Drupal\recipeboxx_recipe\Service\MealPlanService
+    arguments: ['@entity_type.manager', '@current_user', '@recipeboxx_recipe.shopping_list']

@@ -1,0 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: recipe_review
+label: 'Recipe Review'
+target_entity_type_id: node
+description: 'Reviews and ratings for recipes'

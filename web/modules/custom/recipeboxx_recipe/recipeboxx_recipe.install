@@ -25,6 +25,9 @@ function recipeboxx_recipe_install() {
     'view public recipes',
     'clone public recipes',
     'import recipes from url',
+    'create recipe notes',
+    'create shopping lists',
+    'create meal plans',
   ];
 
   user_role_grant_permissions('authenticated', $permissions);
@@ -347,6 +350,498 @@ function _recipeboxx_recipe_create_content_type() {
     ->setComponent('field_prep_time', ['type' => 'number_integer'])
     ->setComponent('field_cook_time', ['type' => 'number_integer'])
     ->save();
+}
+
+/**
+ * Implements hook_schema().
+ */
+function recipeboxx_recipe_schema() {
+  $schema = [];
+
+  // Recipe notes table
+  $schema['recipeboxx_recipe_note'] = [
+    'description' => 'Stores personal recipe notes',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'recipe_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Recipe node ID',
+      ],
+      'note_text' => [
+        'type' => 'text',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
+      'rating' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'description' => 'Personal rating 1-5',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'changed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'user_recipe' => ['uid', 'recipe_id'],
+    ],
+    'indexes' => [
+      'uid' => ['uid'],
+      'recipe_id' => ['recipe_id'],
+    ],
+  ];
+
+  // Review votes table
+  $schema['recipeboxx_review_votes'] = [
+    'description' => 'Stores helpful votes for recipe reviews',
+    'fields' => [
+      'comment_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'vote' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'description' => '1 for helpful, -1 for not helpful',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'unique keys' => [
+      'user_comment' => ['user_id', 'comment_id'],
+    ],
+    'indexes' => [
+      'comment_id' => ['comment_id'],
+    ],
+  ];
+
+  // Made it tracking table
+  $schema['recipeboxx_recipe_made'] = [
+    'description' => 'Tracks "I made this" for recipes',
+    'fields' => [
+      'recipe_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'user_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'unique keys' => [
+      'user_recipe_made' => ['user_id', 'recipe_id'],
+    ],
+    'indexes' => [
+      'recipe_id' => ['recipe_id'],
+      'user_id' => ['user_id'],
+    ],
+  ];
+
+  // Shopping lists table
+  $schema['recipeboxx_shopping_list'] = [
+    'description' => 'Stores shopping lists',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'changed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'uid' => ['uid'],
+    ],
+  ];
+
+  // Shopping list items table
+  $schema['recipeboxx_shopping_list_item'] = [
+    'description' => 'Stores items in shopping lists',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'list_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Shopping list ID',
+      ],
+      'recipe_id' => [
+        'type' => 'int',
+        'description' => 'Recipe node ID',
+      ],
+      'item_text' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ],
+      'quantity' => [
+        'type' => 'varchar',
+        'length' => 100,
+      ],
+      'category' => [
+        'type' => 'varchar',
+        'length' => 50,
+      ],
+      'checked' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'weight' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'notes' => [
+        'type' => 'text',
+        'size' => 'big',
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'list_id' => ['list_id'],
+      'category' => ['category'],
+    ],
+  ];
+
+  // Meal plans table
+  $schema['recipeboxx_meal_plan'] = [
+    'description' => 'Stores meal plans',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'uid' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'User ID',
+      ],
+      'name' => [
+        'type' => 'varchar',
+        'length' => 255,
+      ],
+      'start_date' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'status' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+        'default' => 'active',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+      'changed' => [
+        'type' => 'int',
+        'not null' => TRUE,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'uid_start_date' => ['uid', 'start_date'],
+    ],
+  ];
+
+  // Meal plan entries table
+  $schema['recipeboxx_meal_plan_entry'] = [
+    'description' => 'Stores recipes in meal plans',
+    'fields' => [
+      'id' => [
+        'type' => 'serial',
+        'not null' => TRUE,
+      ],
+      'uuid' => [
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+      ],
+      'plan_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Meal plan ID',
+      ],
+      'recipe_id' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Recipe node ID',
+      ],
+      'day_of_week' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'description' => '0=Monday, 6=Sunday',
+      ],
+      'meal_type' => [
+        'type' => 'varchar',
+        'length' => 20,
+        'not null' => TRUE,
+      ],
+      'servings' => [
+        'type' => 'int',
+      ],
+      'notes' => [
+        'type' => 'text',
+        'size' => 'big',
+      ],
+      'weight' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['id'],
+    'unique keys' => [
+      'uuid' => ['uuid'],
+    ],
+    'indexes' => [
+      'plan_id' => ['plan_id'],
+      'day_meal' => ['day_of_week', 'meal_type'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Add rating and photo fields to recipe content type.
+ */
+function recipeboxx_recipe_update_9001() {
+  $fields = [
+    'field_rating_average' => [
+      'type' => 'decimal',
+      'label' => 'Average Rating',
+      'description' => 'Computed average rating from reviews',
+      'settings' => [
+        'precision' => 3,
+        'scale' => 2,
+        'min' => 0,
+        'max' => 5,
+      ],
+    ],
+    'field_rating_count' => [
+      'type' => 'integer',
+      'label' => 'Rating Count',
+      'description' => 'Number of ratings/reviews',
+      'settings' => ['min' => 0],
+      'default_value' => [['value' => 0]],
+    ],
+    'field_made_count' => [
+      'type' => 'integer',
+      'label' => 'Made Count',
+      'description' => 'Number of times users marked "I made this"',
+      'settings' => ['min' => 0],
+      'default_value' => [['value' => 0]],
+    ],
+    'field_original_servings' => [
+      'type' => 'integer',
+      'label' => 'Original Servings',
+      'description' => 'Original servings for scaling calculations',
+      'settings' => ['min' => 1],
+    ],
+  ];
+
+  foreach ($fields as $field_name => $config) {
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!$field_storage) {
+      $storage_config = [
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => $config['type'],
+        'cardinality' => 1,
+      ];
+
+      if (isset($config['settings'])) {
+        $storage_config['settings'] = $config['settings'];
+      }
+
+      FieldStorageConfig::create($storage_config)->save();
+    }
+
+    $field = FieldConfig::loadByName('node', 'recipe', $field_name);
+    if (!$field) {
+      $field_config = [
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'recipe',
+        'label' => $config['label'],
+        'description' => $config['description'] ?? '',
+      ];
+
+      if (isset($config['default_value'])) {
+        $field_config['default_value'] = $config['default_value'];
+      }
+
+      FieldConfig::create($field_config)->save();
+    }
+  }
+
+  // Create image field for recipe photos
+  $field_storage = FieldStorageConfig::loadByName('node', 'field_recipe_images');
+  if (!$field_storage) {
+    FieldStorageConfig::create([
+      'field_name' => 'field_recipe_images',
+      'entity_type' => 'node',
+      'type' => 'image',
+      'cardinality' => -1,
+      'settings' => [
+        'uri_scheme' => 'public',
+        'default_image' => [],
+      ],
+    ])->save();
+  }
+
+  $field = FieldConfig::loadByName('node', 'recipe', 'field_recipe_images');
+  if (!$field) {
+    FieldConfig::create([
+      'field_name' => 'field_recipe_images',
+      'entity_type' => 'node',
+      'bundle' => 'recipe',
+      'label' => 'Recipe Photos',
+      'description' => 'Upload one or more photos of the recipe',
+      'settings' => [
+        'file_directory' => 'recipe-photos/[date:custom:Y]-[date:custom:m]',
+        'file_extensions' => 'png jpg jpeg gif',
+        'max_filesize' => '5 MB',
+        'max_resolution' => '2048x2048',
+        'min_resolution' => '',
+        'alt_field' => TRUE,
+        'alt_field_required' => FALSE,
+        'title_field' => TRUE,
+        'title_field_required' => FALSE,
+      ],
+    ])->save();
+  }
+
+  return t('Added rating, photo, and scaling fields to recipe content type.');
+}
+
+/**
+ * Add enhanced nutrition fields to recipe content type.
+ */
+function recipeboxx_recipe_update_9002() {
+  $nutrition_fields = [
+    'field_saturated_fat' => ['label' => 'Saturated Fat (g)', 'type' => 'decimal'],
+    'field_trans_fat' => ['label' => 'Trans Fat (g)', 'type' => 'decimal'],
+    'field_cholesterol' => ['label' => 'Cholesterol (mg)', 'type' => 'integer'],
+    'field_sodium' => ['label' => 'Sodium (mg)', 'type' => 'integer'],
+    'field_sugars' => ['label' => 'Sugars (g)', 'type' => 'integer'],
+    'field_vitamin_d' => ['label' => 'Vitamin D (mcg)', 'type' => 'decimal'],
+    'field_calcium' => ['label' => 'Calcium (mg)', 'type' => 'integer'],
+    'field_iron' => ['label' => 'Iron (mg)', 'type' => 'decimal'],
+    'field_potassium' => ['label' => 'Potassium (mg)', 'type' => 'integer'],
+  ];
+
+  foreach ($nutrition_fields as $field_name => $config) {
+    $field_storage = FieldStorageConfig::loadByName('node', $field_name);
+    if (!$field_storage) {
+      $storage_config = [
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'type' => $config['type'],
+        'cardinality' => 1,
+      ];
+
+      if ($config['type'] === 'decimal') {
+        $storage_config['settings'] = [
+          'precision' => 6,
+          'scale' => 2,
+        ];
+      }
+
+      FieldStorageConfig::create($storage_config)->save();
+    }
+
+    $field = FieldConfig::loadByName('node', 'recipe', $field_name);
+    if (!$field) {
+      FieldConfig::create([
+        'field_name' => $field_name,
+        'entity_type' => 'node',
+        'bundle' => 'recipe',
+        'label' => $config['label'],
+        'description' => 'Nutrition information per serving',
+      ])->save();
+    }
+  }
+
+  return t('Added enhanced nutrition fields to recipe content type.');
 }
 
 /**
