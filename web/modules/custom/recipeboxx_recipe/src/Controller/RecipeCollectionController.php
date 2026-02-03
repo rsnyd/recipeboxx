@@ -21,7 +21,7 @@ class RecipeCollectionController extends ControllerBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * The recipe collection service.

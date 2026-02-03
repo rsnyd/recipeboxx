@@ -25,7 +25,7 @@ class RecipeSearchController extends ControllerBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * Constructs a RecipeSearchController object.

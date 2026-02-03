@@ -18,7 +18,7 @@ class ShoppingListController extends ControllerBase {
    *
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected EntityTypeManagerInterface $entityTypeManager;
+  protected $entityTypeManager;
 
   /**
    * The shopping list service.

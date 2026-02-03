@@ -1,6 +1,8 @@
 {
   "permissions": {
     "allow": [
+      "Edit:*",
+      "Write:*",
       "Bash(ddev config:*)",
       "Bash(ddev start:*)",
       "Bash(git init:*)",
@@ -25,7 +27,22 @@
       "Bash(composer require:*)",
       "Bash(composer update:*)",
       "Bash(drush en:*)",
-      "Bash(./vendor/bin/drush en:*)"
+      "Bash(./vendor/bin/drush en:*)",
+      "Bash(ddev status:*)",
+      "Bash(test:*)",
+      "Bash(command -v:*)",
+      "Bash(where.exe:*)",
+      "Bash(alias:*)",
+      "Bash(docker ps:*)",
+      "Bash(~/.ddev/bin/ddev version:*)",
+      "Bash(/usr/local/bin/ddev version:*)",
+      "Bash(wsl.exe -d Ubuntu which ddev:*)",
+      "Bash(wsl.exe -d Ubuntu ddev version:*)",
+      "Bash(wsl.exe -d Ubuntu ddev drush updatedb:*)",
+      "Bash(wsl.exe -d Ubuntu ddev drush php-eval:*)",
+      "Bash(wsl.exe -d Ubuntu ddev drush:*)",
+      "Bash(~/.bashrc)",
+      "Bash(source:*)"
     ]
   }
 }
