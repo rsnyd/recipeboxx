@@ -2,7 +2,7 @@
 # AI can make mistakes. Please modify this file to suit your needs.
 applications:
   drupal:
-    type: php:8.5
+    type: php:8.4
 
     build:
       flavor: none
