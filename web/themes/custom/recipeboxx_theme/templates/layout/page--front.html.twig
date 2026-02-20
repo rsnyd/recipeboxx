@@ -1,0 +1,212 @@
+{#
+/**
+ * @file
+ * RecipeBoxx theme implementation for the front page.
+ */
+#}
+<div class="page-wrapper">
+  <a href="#main-content" class="skip-link">
+    {{ 'Skip to main content'|t }}
+  </a>
+
+  {% include '@recipeboxx_theme/layout/header.html.twig' %}
+
+  <main class="main-content" id="main-content" role="main">
+    {# Hero Section #}
+    <section class="hero hero--split">
+      <div class="hero__content">
+        <span class="hero__label">{{ 'Your Personal Recipe Box'|t }}</span>
+        <h1 class="hero__title">
+          {{ 'Discover, Save & Share'|t }}<br>
+          <span>{{ 'Delicious Recipes'|t }}</span>
+        </h1>
+        <p class="hero__description">
+          {{ 'Organize your favorite recipes, create meal plans, and build shopping lists. Your culinary journey starts here.'|t }}
+        </p>
+        <div class="hero__actions">
+          <a href="{{ path('user.register') }}" class="btn btn--primary btn--lg">
+            {{ 'Get Started Free'|t }}
+          </a>
+          <a href="#featured-recipes" class="btn btn--outline btn--lg">
+            {{ 'Browse Recipes'|t }}
+          </a>
+        </div>
+      </div>
+      <div class="hero__image">
+        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=900&fit=crop" alt="{{ 'Fresh ingredients and cooking'|t }}" loading="eager">
+      </div>
+    </section>
+
+    {# Stats Section #}
+    <section class="section section--light">
+      <div class="container">
+        <div class="stats">
+          <div class="stat">
+            <div class="stat__number">500+</div>
+            <div class="stat__label">{{ 'Recipes'|t }}</div>
+          </div>
+          <div class="stat">
+            <div class="stat__number">50+</div>
+            <div class="stat__label">{{ 'Cuisines'|t }}</div>
+          </div>
+          <div class="stat">
+            <div class="stat__number">1000+</div>
+            <div class="stat__label">{{ 'Home Cooks'|t }}</div>
+          </div>
+          <div class="stat">
+            <div class="stat__number">4.9</div>
+            <div class="stat__label">{{ 'User Rating'|t }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {% if page.highlighted %}
+      <div class="highlighted">
+        <div class="container">
+          {{ page.highlighted }}
+        </div>
+      </div>
+    {% endif %}
+
+    {# Featured Recipes Section #}
+    <section class="featured-recipes section section--lg" id="featured-recipes">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">{{ 'Featured'|t }}</span>
+          <h2 class="section-header__title">{{ 'Popular Recipes'|t }}</h2>
+          <p class="section-header__description">
+            {{ 'Discover what others are cooking and get inspired for your next meal.'|t }}
+          </p>
+        </div>
+
+        {{ page.content }}
+      </div>
+    </section>
+
+    {# Categories Section #}
+    <section class="categories section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">{{ 'Explore'|t }}</span>
+          <h2 class="section-header__title">{{ 'Browse by Category'|t }}</h2>
+        </div>
+
+        <div class="grid grid--4">
+          <a href="/recipes/search?keyword=breakfast" class="category-card">
+            <img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=400&h=400&fit=crop" alt="{{ 'Breakfast'|t }}" loading="lazy">
+            <div class="category-card__content">
+              <h3 class="category-card__title">{{ 'Breakfast'|t }}</h3>
+              <span class="category-card__count">{{ '124 recipes'|t }}</span>
+            </div>
+          </a>
+          <a href="/recipes/search?keyword=healthy" class="category-card">
+            <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=400&fit=crop" alt="{{ 'Healthy'|t }}" loading="lazy">
+            <div class="category-card__content">
+              <h3 class="category-card__title">{{ 'Healthy'|t }}</h3>
+              <span class="category-card__count">{{ '89 recipes'|t }}</span>
+            </div>
+          </a>
+          <a href="/recipes/search?keyword=dinner" class="category-card">
+            <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop" alt="{{ 'Dinner'|t }}" loading="lazy">
+            <div class="category-card__content">
+              <h3 class="category-card__title">{{ 'Dinner'|t }}</h3>
+              <span class="category-card__count">{{ '156 recipes'|t }}</span>
+            </div>
+          </a>
+          <a href="/recipes/search?keyword=dessert" class="category-card">
+            <img src="https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=400&fit=crop" alt="{{ 'Desserts'|t }}" loading="lazy">
+            <div class="category-card__content">
+              <h3 class="category-card__title">{{ 'Desserts'|t }}</h3>
+              <span class="category-card__count">{{ '78 recipes'|t }}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {# Features Section #}
+    <section class="section section--light">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-header__label">{{ 'Features'|t }}</span>
+          <h2 class="section-header__title">{{ 'Everything You Need'|t }}</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="feature">
+            <div class="feature__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <h3 class="feature__title">{{ 'Import Recipes'|t }}</h3>
+            <p class="feature__description">
+              {{ 'Save recipes from any website with our smart import tool. Just paste the URL and we do the rest.'|t }}
+            </p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+            </div>
+            <h3 class="feature__title">{{ 'Meal Planning'|t }}</h3>
+            <p class="feature__description">
+              {{ 'Plan your weekly meals with ease. Drag and drop recipes into your calendar.'|t }}
+            </p>
+          </div>
+          <div class="feature">
+            <div class="feature__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <path d="M16 10a4 4 0 0 1-8 0"></path>
+              </svg>
+            </div>
+            <h3 class="feature__title">{{ 'Shopping Lists'|t }}</h3>
+            <p class="feature__description">
+              {{ 'Generate shopping lists automatically from your meal plan. Never forget an ingredient again.'|t }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# CTA Section #}
+    <section class="cta">
+      <div class="container">
+        <div class="cta__content">
+          <h2 class="cta__title">{{ 'Ready to Start Cooking?'|t }}</h2>
+          <p class="cta__description">
+            {{ 'Join thousands of home cooks who use RecipeBoxx to organize their recipes and plan delicious meals.'|t }}
+          </p>
+          <a href="{{ path('user.register') }}" class="btn btn--white btn--lg">
+            {{ 'Create Free Account'|t }}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    {% if page.featured_bottom %}
+      <div class="featured-bottom section">
+        <div class="container">
+          {{ page.featured_bottom }}
+        </div>
+      </div>
+    {% endif %}
+  </main>
+
+  {% include '@recipeboxx_theme/layout/footer.html.twig' %}
+
+  <button class="back-to-top" aria-label="{{ 'Back to top'|t }}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m18 15-6-6-6 6"/>
+    </svg>
+  </button>
+</div>

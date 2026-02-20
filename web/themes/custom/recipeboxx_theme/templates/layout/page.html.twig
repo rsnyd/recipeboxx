@@ -1,0 +1,95 @@
+{#
+/**
+ * @file
+ * RecipeBoxx theme implementation to display a single page.
+ */
+#}
+<div class="page-wrapper">
+  <a href="#main-content" class="skip-link">
+    {{ 'Skip to main content'|t }}
+  </a>
+
+  {% include '@recipeboxx_theme/layout/header.html.twig' %}
+
+  <main class="main-content" id="main-content" role="main">
+    {% if page.hero %}
+      <div class="hero-region">
+        {{ page.hero }}
+      </div>
+    {% endif %}
+
+    {% if page.highlighted %}
+      <div class="highlighted">
+        <div class="container">
+          {{ page.highlighted }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.help %}
+      <div class="help">
+        <div class="container">
+          {{ page.help }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.breadcrumb %}
+      <div class="breadcrumb-region">
+        <div class="container">
+          {{ page.breadcrumb }}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="content-region">
+      <div class="container">
+        {% if page.sidebar_first or page.sidebar_second %}
+          <div class="layout-with-sidebar{% if page.sidebar_first %} layout-with-sidebar--left{% endif %}">
+            {% if page.sidebar_first %}
+              <aside class="sidebar sidebar--first" role="complementary">
+                {{ page.sidebar_first }}
+              </aside>
+            {% endif %}
+
+            <div class="content-main">
+              {{ page.content }}
+            </div>
+
+            {% if page.sidebar_second %}
+              <aside class="sidebar sidebar--second" role="complementary">
+                {{ page.sidebar_second }}
+              </aside>
+            {% endif %}
+          </div>
+        {% else %}
+          {{ page.content }}
+        {% endif %}
+      </div>
+    </div>
+
+    {% if page.featured_top %}
+      <div class="featured-top section section--light">
+        <div class="container">
+          {{ page.featured_top }}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if page.featured_bottom %}
+      <div class="featured-bottom section">
+        <div class="container">
+          {{ page.featured_bottom }}
+        </div>
+      </div>
+    {% endif %}
+  </main>
+
+  {% include '@recipeboxx_theme/layout/footer.html.twig' %}
+
+  <button class="back-to-top" aria-label="{{ 'Back to top'|t }}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m18 15-6-6-6 6"/>
+    </svg>
+  </button>
+</div>

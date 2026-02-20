@@ -1,0 +1,136 @@
+/**
+ * RecipeBoxx Theme - CSS Custom Properties
+ * A warm, food-inspired color palette with modern typography
+ */
+
+:root {
+  /* Color Palette - Warm Food-Inspired Theme */
+  --color-primary: #2d5a47;          /* Deep sage green - herbs */
+  --color-primary-light: #3d7a5f;    /* Lighter sage */
+  --color-primary-dark: #1d3a2f;     /* Dark forest */
+
+  --color-secondary: #c45c3e;        /* Terracotta/rust - spices */
+  --color-secondary-light: #d47a5e;  /* Lighter terracotta */
+  --color-secondary-dark: #a44c2e;   /* Deep rust */
+
+  --color-accent: #d4a744;           /* Saffron/golden - honey */
+  --color-accent-light: #e4c774;     /* Light gold */
+  --color-accent-dark: #b48724;      /* Deep gold */
+
+  /* Neutrals */
+  --color-white: #ffffff;
+  --color-cream: #faf8f5;            /* Warm off-white */
+  --color-light: #f5f2ed;            /* Light cream */
+  --color-gray-100: #e8e4dd;
+  --color-gray-200: #d4cfc5;
+  --color-gray-300: #b8b1a4;
+  --color-gray-400: #8e8e8e;
+  --color-gray-500: #6b6b6b;
+  --color-gray-600: #4a4a4a;
+  --color-dark: #1a1a1a;             /* Near black */
+  --color-black: #0b0b0b;
+
+  /* Semantic Colors */
+  --color-success: #2d5a47;
+  --color-warning: #d4a744;
+  --color-error: #c45c3e;
+  --color-info: #3d7a5f;
+
+  /* Typography */
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Font Sizes - Fluid Typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+  --text-3xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.5rem);
+  --text-4xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
+  --text-5xl: clamp(3rem, 2rem + 5vw, 4rem);
+
+  /* Font Weights */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+
+  /* Letter Spacing */
+  --tracking-tight: -0.025em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+
+  /* Spacing Scale */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Container */
+  --container-max: 1570px;
+  --container-padding: clamp(1.25rem, 1rem + 2vw, 5rem);
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-full: 9999px;
+  --radius-pill: 60px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Z-Index Scale */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-fixed: 300;
+  --z-modal-backdrop: 400;
+  --z-modal: 500;
+  --z-popover: 600;
+  --z-tooltip: 700;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-cream: #1a1a1a;
+    --color-light: #222222;
+    --color-dark: #f5f2ed;
+    --color-black: #ffffff;
+  }
+}

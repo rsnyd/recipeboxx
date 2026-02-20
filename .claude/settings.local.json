@@ -42,7 +42,8 @@
       "Bash(wsl.exe -d Ubuntu ddev drush php-eval:*)",
       "Bash(wsl.exe -d Ubuntu ddev drush:*)",
       "Bash(~/.bashrc)",
-      "Bash(source:*)"
+      "Bash(source:*)",
+      "WebFetch(domain:www.qualitas-payroll.co.uk)"
     ]
   }
 }

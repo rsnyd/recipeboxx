@@ -1,0 +1,34 @@
+name: RecipeBoxx
+type: theme
+description: 'A modern, mobile-friendly theme for RecipeBoxx - your personal recipe collection.'
+core_version_requirement: ^10.3 || ^11
+base theme: false
+
+libraries:
+  - recipeboxx_theme/global
+
+regions:
+  header: Header
+  primary_menu: Primary Menu
+  secondary_menu: Secondary Menu
+  hero: Hero
+  highlighted: Highlighted
+  help: Help
+  breadcrumb: Breadcrumb
+  content: Content
+  sidebar_first: Sidebar First
+  sidebar_second: Sidebar Second
+  featured_top: Featured Top
+  featured_bottom: Featured Bottom
+  footer_first: Footer First
+  footer_second: Footer Second
+  footer_third: Footer Third
+  footer_fourth: Footer Fourth
+  footer: Footer
+  page_top: Page Top
+  page_bottom: Page Bottom
+
+libraries-override:
+  classy/base: false
+  classy/messages: false
+  stable/drupal.message: false

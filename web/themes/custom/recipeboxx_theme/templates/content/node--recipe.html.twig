@@ -1,0 +1,183 @@
+{#
+/**
+ * @file
+ * RecipeBoxx theme implementation for Recipe full display.
+ */
+#}
+{%
+  set classes = [
+    'recipe-detail',
+    'node',
+    'node--type-' ~ node.bundle|clean_class,
+    node.isPromoted() ? 'node--promoted',
+    node.isSticky() ? 'node--sticky',
+    not node.isPublished() ? 'node--unpublished',
+    view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
+  ]
+%}
+
+<article{{ attributes.addClass(classes) }}>
+  <div class="recipe-detail__header">
+    {% if content.field_recipe_images|render|trim %}
+      <div class="recipe-detail__image">
+        {{ content.field_recipe_images }}
+      </div>
+    {% endif %}
+
+    <h1 class="recipe-detail__title">{{ label }}</h1>
+
+    {% if content.field_source_author|render|trim or content.field_source_site|render|trim %}
+      <p class="recipe-detail__source">
+        {% if content.field_source_author|render|trim %}
+          {{ 'By'|t }} {{ content.field_source_author }}
+        {% endif %}
+        {% if content.field_source_site|render|trim %}
+          {{ 'from'|t }} {{ content.field_source_site }}
+        {% endif %}
+      </p>
+    {% endif %}
+
+    <div class="recipe-detail__meta">
+      {% if content.field_prep_time|render|trim %}
+        <div class="recipe-detail__meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span><strong>{{ 'Prep:'|t }}</strong> {{ content.field_prep_time }} {{ 'min'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if content.field_cook_time|render|trim %}
+        <div class="recipe-detail__meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"/>
+          </svg>
+          <span><strong>{{ 'Cook:'|t }}</strong> {{ content.field_cook_time }} {{ 'min'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if content.field_total_time|render|trim %}
+        <div class="recipe-detail__meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 22h14"></path>
+            <path d="M5 2h14"></path>
+            <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"></path>
+            <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"></path>
+          </svg>
+          <span><strong>{{ 'Total:'|t }}</strong> {{ content.field_total_time }} {{ 'min'|t }}</span>
+        </div>
+      {% endif %}
+
+      {% if content.field_servings|render|trim %}
+        <div class="recipe-detail__meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span><strong>{{ 'Servings:'|t }}</strong> {{ content.field_servings }}</span>
+        </div>
+      {% endif %}
+
+      {% if content.field_calories|render|trim %}
+        <div class="recipe-detail__meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+          </svg>
+          <span><strong>{{ 'Calories:'|t }}</strong> {{ content.field_calories }}</span>
+        </div>
+      {% endif %}
+    </div>
+
+    {% if content.field_cuisine_type|render|trim or content.field_meal_type|render|trim or content.field_dietary_restrictions|render|trim %}
+      <div class="recipe-detail__tags">
+        {{ content.field_cuisine_type }}
+        {{ content.field_meal_type }}
+        {{ content.field_dietary_restrictions }}
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="recipe-detail__content">
+    <div class="recipe-detail__main">
+      {% if content.body|render|trim %}
+        <div class="recipe-detail__description">
+          <h2>{{ 'Description'|t }}</h2>
+          {{ content.body }}
+        </div>
+      {% endif %}
+
+      <div class="instructions">
+        <h2 class="instructions__title">{{ 'Instructions'|t }}</h2>
+        {{ content.body }}
+      </div>
+    </div>
+
+    <aside class="recipe-detail__sidebar">
+      <div class="ingredients">
+        <h3 class="ingredients__title">{{ 'Ingredients'|t }}</h3>
+        {% if content.field_ingredients|render|trim %}
+          {{ content.field_ingredients }}
+        {% endif %}
+      </div>
+
+      {% if content.field_calories|render|trim or content.field_protein|render|trim or content.field_carbohydrates|render|trim or content.field_fat|render|trim %}
+        <div class="nutrition">
+          <h3 class="nutrition__title">{{ 'Nutrition Facts'|t }}</h3>
+          <p class="nutrition__note">{{ 'Per serving'|t }}</p>
+          <ul class="nutrition__list">
+            {% if content.field_calories|render|trim %}
+              <li class="nutrition__item">
+                <span class="nutrition__label">{{ 'Calories'|t }}</span>
+                <span class="nutrition__value">{{ content.field_calories }}</span>
+              </li>
+            {% endif %}
+            {% if content.field_protein|render|trim %}
+              <li class="nutrition__item">
+                <span class="nutrition__label">{{ 'Protein'|t }}</span>
+                <span class="nutrition__value">{{ content.field_protein }}g</span>
+              </li>
+            {% endif %}
+            {% if content.field_carbohydrates|render|trim %}
+              <li class="nutrition__item">
+                <span class="nutrition__label">{{ 'Carbs'|t }}</span>
+                <span class="nutrition__value">{{ content.field_carbohydrates }}g</span>
+              </li>
+            {% endif %}
+            {% if content.field_fat|render|trim %}
+              <li class="nutrition__item">
+                <span class="nutrition__label">{{ 'Fat'|t }}</span>
+                <span class="nutrition__value">{{ content.field_fat }}g</span>
+              </li>
+            {% endif %}
+            {% if content.field_fiber|render|trim %}
+              <li class="nutrition__item">
+                <span class="nutrition__label">{{ 'Fiber'|t }}</span>
+                <span class="nutrition__value">{{ content.field_fiber }}g</span>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endif %}
+
+      <div class="recipe-actions">
+        <button class="btn btn--primary btn--print" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"></polyline>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+            <rect x="6" y="14" width="12" height="8"></rect>
+          </svg>
+          {{ 'Print Recipe'|t }}
+        </button>
+      </div>
+    </aside>
+  </div>
+
+  {% if content.field_source_url|render|trim %}
+    <div class="recipe-detail__source-link">
+      <p>{{ 'Original recipe:'|t }} {{ content.field_source_url }}</p>
+    </div>
+  {% endif %}
+</article>

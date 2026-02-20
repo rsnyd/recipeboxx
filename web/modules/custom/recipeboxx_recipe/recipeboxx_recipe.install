@@ -7,6 +7,7 @@
 
 use Drupal\taxonomy\Entity\Term;
 use Drupal\node\Entity\NodeType;
+use Drupal\node\Entity\Node;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\field\Entity\FieldConfig;
 
@@ -941,6 +942,227 @@ function recipeboxx_recipe_update_9002() {
   }
 
   return t('Added enhanced nutrition fields to recipe content type.');
+}
+
+/**
+ * Create Basic Page content type and static pages (Help Center, Privacy Policy, Terms of Service).
+ */
+function recipeboxx_recipe_update_9003() {
+  // Create "Basic Page" content type if it doesn't exist.
+  $type = NodeType::load('page');
+  if (!$type) {
+    $type = NodeType::create([
+      'type' => 'page',
+      'name' => 'Basic page',
+      'description' => 'Use basic pages for static content like About, Help, Privacy Policy, etc.',
+    ]);
+    $type->save();
+
+    // Create body field storage if it doesn't exist.
+    $field_storage = FieldStorageConfig::loadByName('node', 'body');
+    if (!$field_storage) {
+      FieldStorageConfig::create([
+        'field_name' => 'body',
+        'entity_type' => 'node',
+        'type' => 'text_with_summary',
+        'cardinality' => 1,
+      ])->save();
+    }
+
+    // Create body field instance for the page type.
+    $field = FieldConfig::loadByName('node', 'page', 'body');
+    if (!$field) {
+      FieldConfig::create([
+        'field_name' => 'body',
+        'entity_type' => 'node',
+        'bundle' => 'page',
+        'label' => 'Body',
+      ])->save();
+    }
+
+    // Configure form display.
+    \Drupal::service('entity_display.repository')
+      ->getFormDisplay('node', 'page', 'default')
+      ->setComponent('body', ['type' => 'text_textarea_with_summary'])
+      ->save();
+
+    // Configure view display.
+    \Drupal::service('entity_display.repository')
+      ->getViewDisplay('node', 'page', 'default')
+      ->setComponent('body', ['type' => 'text_default'])
+      ->save();
+  }
+
+  // Create the static pages.
+  _recipeboxx_recipe_create_static_pages();
+
+  return t('Created Basic Page content type and static pages.');
+}
+
+/**
+ * Enable contact module and configure the site-wide contact form.
+ */
+function recipeboxx_recipe_update_9004() {
+  if (!\Drupal::moduleHandler()->moduleExists('contact')) {
+    \Drupal::service('module_installer')->install(['contact']);
+  }
+
+  // Grant permissions for the contact form.
+  user_role_grant_permissions('anonymous', ['access site-wide contact form']);
+  user_role_grant_permissions('authenticated', ['access site-wide contact form']);
+
+  return t('Contact module enabled and permissions configured.');
+}
+
+/**
+ * Helper function to create static content pages.
+ */
+function _recipeboxx_recipe_create_static_pages() {
+  $pages = [
+    [
+      'title' => 'Help Center',
+      'alias' => '/help-center',
+      'body' => '<h2>Getting Started</h2>
+<p>Welcome to RecipeBoxx! Here you\'ll find answers to common questions and helpful guides to make the most of your recipe collection.</p>
+
+<h3>Creating Your First Recipe</h3>
+<p>Click "Add Recipe" from your account dashboard. Fill in the recipe title, ingredients, and instructions. You can also add photos, prep time, cook time, and serving information to help organize your collection.</p>
+
+<h3>Importing Recipes from the Web</h3>
+<p>Found a great recipe online? You can import recipes from most cooking websites. Simply navigate to <a href="/recipe/import">Import Recipe</a>, paste the URL, and we\'ll automatically extract the recipe information including ingredients, instructions, and photos.</p>
+
+<h3>Organizing Your Collection</h3>
+<p>Use <strong>collections</strong> to group related recipes together. Create collections for meal prep, holiday favorites, weeknight dinners, baking projects, and more. You can make collections private or share them publicly with the community.</p>
+
+<h3>Meal Planning</h3>
+<p>Use the <a href="/meal-plan/current">meal planner</a> to schedule recipes for the week ahead. Assign recipes to specific days and meal types (breakfast, lunch, dinner), then generate a shopping list automatically from your plan.</p>
+
+<h3>Shopping Lists</h3>
+<p>Create <a href="/my/shopping-lists">shopping lists</a> manually or generate them from your meal plan. Check off items as you shop. Shopping lists are organized by category to make your grocery trips more efficient.</p>
+
+<h3>Cooking Mode</h3>
+<p>When you\'re ready to cook, use Cooking Mode for a distraction-free, step-by-step view of your recipe. Large text and simple navigation make it easy to follow along while your hands are busy.</p>
+
+<h3>Sharing Recipes</h3>
+<p>Set any recipe to "Public" to share it with the RecipeBoxx community. Other users can browse, save, and clone public recipes to their own collections. You always retain credit as the original author.</p>
+
+<h3>Need More Help?</h3>
+<p>If you can\'t find what you\'re looking for, please visit our <a href="/contact">Contact Us</a> page and we\'ll be happy to help.</p>',
+    ],
+    [
+      'title' => 'Privacy Policy',
+      'alias' => '/privacy-policy',
+      'body' => '<p><strong>Last Updated: February 2026</strong></p>
+
+<h2>Information We Collect</h2>
+<p>When you create an account on RecipeBoxx, we collect your name, email address, and any profile information you choose to provide. When you use our service, we collect the recipes you save, your meal plans, shopping lists, and usage data to improve your experience.</p>
+
+<h2>How We Use Your Information</h2>
+<ul>
+<li>Provide and maintain the RecipeBoxx service</li>
+<li>Personalize your experience and recipe recommendations</li>
+<li>Communicate with you about your account and service updates</li>
+<li>Ensure the security of your account and data</li>
+<li>Improve our platform based on how users interact with it</li>
+</ul>
+
+<h2>Information Sharing</h2>
+<p>We do not sell, trade, or rent your personal information to third parties. Recipes you mark as "Public" will be visible to other RecipeBoxx users. Private recipes, meal plans, and shopping lists are only accessible to you. We may share anonymized, aggregated data for analytics purposes.</p>
+
+<h2>Data Security</h2>
+<p>We implement industry-standard security measures including encrypted connections (HTTPS), secure password hashing, and regular security audits to protect your personal information. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee absolute security.</p>
+
+<h2>Your Rights</h2>
+<p>You have the right to:</p>
+<ul>
+<li>Access and review your personal data at any time through your account settings</li>
+<li>Update or correct your personal information</li>
+<li>Export your recipes and data</li>
+<li>Request deletion of your account and associated data</li>
+</ul>
+
+<h2>Cookies</h2>
+<p>We use essential cookies to maintain your login session and remember your preferences. These cookies are necessary for the service to function properly. We do not use third-party advertising or tracking cookies.</p>
+
+<h2>Children\'s Privacy</h2>
+<p>RecipeBoxx is not directed at children under 13. We do not knowingly collect personal information from children under 13 years of age.</p>
+
+<h2>Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. We will notify registered users of significant changes via email. Continued use of the service after changes constitutes acceptance of the updated policy.</p>
+
+<h2>Contact Us</h2>
+<p>If you have questions about this Privacy Policy or how we handle your data, please <a href="/contact">contact us</a>.</p>',
+    ],
+    [
+      'title' => 'Terms of Service',
+      'alias' => '/terms-of-service',
+      'body' => '<p><strong>Last Updated: February 2026</strong></p>
+
+<h2>Acceptance of Terms</h2>
+<p>By accessing and using RecipeBoxx, you agree to be bound by these Terms of Service and our <a href="/privacy-policy">Privacy Policy</a>. If you do not agree to these terms, please do not use the service.</p>
+
+<h2>Account Responsibilities</h2>
+<p>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must provide accurate information when creating your account and keep it up to date. You must be at least 13 years old to create an account.</p>
+
+<h2>User Content</h2>
+<p>You retain ownership of recipes, photos, and content you create on RecipeBoxx. By making content "Public," you grant other users a non-exclusive right to view, save, and clone your recipes for personal use. You agree not to post content that:</p>
+<ul>
+<li>Infringes on others\' intellectual property rights</li>
+<li>Contains harmful, offensive, or misleading information</li>
+<li>Violates any applicable laws or regulations</li>
+</ul>
+
+<h2>Imported Content</h2>
+<p>When importing recipes from external websites, you are responsible for ensuring you have the right to save and use that content. Imported recipes are set to "Private" by default. Making imported content public may have intellectual property implications.</p>
+
+<h2>Acceptable Use</h2>
+<p>You agree not to misuse the service, including but not limited to:</p>
+<ul>
+<li>Using automated tools to scrape or bulk-download content</li>
+<li>Attempting to access other users\' private data</li>
+<li>Uploading malicious code or files</li>
+<li>Interfering with the service\'s operation or infrastructure</li>
+<li>Creating multiple accounts to circumvent restrictions</li>
+</ul>
+
+<h2>Service Availability</h2>
+<p>We strive to keep RecipeBoxx available at all times, but we do not guarantee uninterrupted access. We may modify, suspend, or discontinue features with reasonable notice when possible. We will make reasonable efforts to notify users before removing core functionality.</p>
+
+<h2>Limitation of Liability</h2>
+<p>RecipeBoxx is provided "as is" without warranties of any kind, express or implied. We are not liable for any damages arising from your use of the service. Specifically, we are not responsible for food safety outcomes, nutritional accuracy, or allergic reactions resulting from following recipes on the platform. Always use your own judgment when preparing food.</p>
+
+<h2>Termination</h2>
+<p>You may delete your account at any time through your account settings. We reserve the right to suspend or terminate accounts that violate these Terms of Service. Upon termination, your private content will be deleted in accordance with our Privacy Policy.</p>
+
+<h2>Changes to Terms</h2>
+<p>We may update these terms from time to time. We will notify registered users of significant changes via email. Continued use of the service after changes constitutes acceptance of the updated terms.</p>
+
+<h2>Contact</h2>
+<p>Questions about these Terms of Service? Please <a href="/contact">contact us</a>.</p>',
+    ],
+  ];
+
+  foreach ($pages as $page_data) {
+    // Check if a node with this title already exists.
+    $existing = \Drupal::entityTypeManager()
+      ->getStorage('node')
+      ->loadByProperties(['title' => $page_data['title'], 'type' => 'page']);
+
+    if (empty($existing)) {
+      $node = Node::create([
+        'type' => 'page',
+        'title' => $page_data['title'],
+        'body' => [
+          'value' => $page_data['body'],
+          'format' => 'full_html',
+        ],
+        'status' => 1,
+        'uid' => 1,
+        'path' => ['alias' => $page_data['alias']],
+      ]);
+      $node->save();
+    }
+  }
 }
 
 /**

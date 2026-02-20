@@ -1,0 +1,47 @@
+{#
+/**
+ * @file
+ * RecipeBoxx theme implementation for a navigation menu.
+ */
+#}
+{% import _self as menus %}
+
+{#
+  We call a macro which calls itself to render the full tree.
+  @see https://twig.symfony.com/doc/1.x/tags/macro.html
+#}
+{{ menus.menu_links(items, attributes, 0) }}
+
+{% macro menu_links(items, attributes, menu_level) %}
+  {% import _self as menus %}
+  {% if items %}
+    {% if menu_level == 0 %}
+      <ul{{ attributes.addClass('nav') }}>
+    {% else %}
+      <ul class="nav__submenu">
+    {% endif %}
+    {% for item in items %}
+      {%
+        set classes = [
+          'nav__item',
+          item.is_expanded ? 'nav__item--expanded',
+          item.is_collapsed ? 'nav__item--collapsed',
+          item.in_active_trail ? 'nav__item--active-trail',
+        ]
+      %}
+      <li{{ item.attributes.addClass(classes) }}>
+        {%
+          set link_classes = [
+            'nav__link',
+            item.in_active_trail ? 'nav__link--active',
+          ]
+        %}
+        {{ link(item.title, item.url, {'class': link_classes}) }}
+        {% if item.below %}
+          {{ menus.menu_links(item.below, attributes, menu_level + 1) }}
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}

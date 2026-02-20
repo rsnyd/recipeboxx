@@ -1,0 +1,29 @@
+global:
+  version: 1.0
+  css:
+    base:
+      css/normalize.css: {}
+      css/variables.css: {}
+    layout:
+      css/layout.css: {}
+    component:
+      css/components.css: {}
+    theme:
+      css/style.css: {}
+  js:
+    js/main.js: {}
+  dependencies:
+    - core/drupal
+    - core/once
+
+hero:
+  version: 1.0
+  css:
+    component:
+      css/hero.css: {}
+
+recipe-card:
+  version: 1.0
+  css:
+    component:
+      css/recipe-card.css: {}

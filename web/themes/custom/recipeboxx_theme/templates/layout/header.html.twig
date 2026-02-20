@@ -1,0 +1,116 @@
+{#
+/**
+ * @file
+ * RecipeBoxx theme header template.
+ */
+#}
+<header class="header" role="banner">
+  <div class="container">
+    <div class="header__inner">
+      <a href="{{ path('<front>') }}" class="logo" rel="home">
+        <svg class="logo__icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="48" height="48" rx="12" fill="#2d5a47"/>
+          <path d="M14 32V20C14 17.7909 15.7909 16 18 16H30C32.2091 16 34 17.7909 34 20V32C34 34.2091 32.2091 36 30 36H18C15.7909 36 14 34.2091 14 32Z" stroke="white" stroke-width="2"/>
+          <path d="M18 16V14C18 12.8954 18.8954 12 20 12H28C29.1046 12 30 12.8954 30 14V16" stroke="white" stroke-width="2"/>
+          <circle cx="21" cy="24" r="2" fill="white"/>
+          <circle cx="27" cy="24" r="2" fill="white"/>
+          <path d="M20 29C20 29 22 31 24 31C26 31 28 29 28 29" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="logo__text">Recipe<span>Boxx</span></span>
+      </a>
+
+      <div class="header__search">
+        <form action="/recipes/search" method="get" class="search" role="search">
+          <svg class="search__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="search" name="keyword" class="search__input" placeholder="{{ 'Search recipes...'|t }}" aria-label="{{ 'Search recipes'|t }}">
+        </form>
+      </div>
+
+      <div class="header__actions">
+        {% if logged_in %}
+          <a href="{{ path('user.page') }}" class="btn btn--primary btn--sm">
+            {{ 'My Account'|t }}
+          </a>
+        {% else %}
+          <a href="{{ path('user.login') }}" class="btn btn--primary btn--sm">
+            {{ 'Sign In'|t }}
+          </a>
+        {% endif %}
+
+        <button class="hamburger header__mobile-toggle" aria-label="{{ 'Toggle menu'|t }}" aria-expanded="false">
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+          <span class="hamburger__line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+{# Mobile Navigation #}
+<nav class="mobile-nav" role="navigation" aria-label="{{ 'Mobile navigation'|t }}" aria-hidden="true">
+
+  {# Browse Recipes #}
+  <div class="mobile-nav__section">
+    <h3 class="mobile-nav__heading">{{ 'Browse Recipes'|t }}</h3>
+    <a href="/recipes/search" class="mobile-nav__link">{{ 'All Recipes'|t }}</a>
+    <a href="/recipes/popular" class="mobile-nav__link">{{ 'Popular'|t }}</a>
+    <a href="/recipes/recent" class="mobile-nav__link">{{ 'Recent'|t }}</a>
+    <a href="/recipes/top-rated" class="mobile-nav__link">{{ 'Top Rated'|t }}</a>
+  </div>
+
+  {# Categories - Meal Types #}
+  <div class="mobile-nav__section">
+    <h3 class="mobile-nav__heading">{{ 'Categories'|t }}</h3>
+    {% if meal_types is not empty %}
+      {% for id, name in meal_types %}
+        <a href="/recipes/search?keyword={{ name|url_encode }}" class="mobile-nav__link">{{ name }}</a>
+      {% endfor %}
+    {% else %}
+      <a href="/recipes/search?keyword=breakfast" class="mobile-nav__link">{{ 'Breakfast'|t }}</a>
+      <a href="/recipes/search?keyword=lunch" class="mobile-nav__link">{{ 'Lunch'|t }}</a>
+      <a href="/recipes/search?keyword=dinner" class="mobile-nav__link">{{ 'Dinner'|t }}</a>
+      <a href="/recipes/search?keyword=dessert" class="mobile-nav__link">{{ 'Dessert'|t }}</a>
+      <a href="/recipes/search?keyword=snack" class="mobile-nav__link">{{ 'Snack'|t }}</a>
+    {% endif %}
+  </div>
+
+  {# Cuisines #}
+  <div class="mobile-nav__section">
+    <h3 class="mobile-nav__heading">{{ 'Cuisines'|t }}</h3>
+    {% if cuisine_types is not empty %}
+      {% for id, name in cuisine_types %}
+        <a href="/recipes/search?keyword={{ name|url_encode }}" class="mobile-nav__link">{{ name }}</a>
+      {% endfor %}
+    {% else %}
+      <a href="/recipes/search?keyword=italian" class="mobile-nav__link">{{ 'Italian'|t }}</a>
+      <a href="/recipes/search?keyword=mexican" class="mobile-nav__link">{{ 'Mexican'|t }}</a>
+      <a href="/recipes/search?keyword=chinese" class="mobile-nav__link">{{ 'Chinese'|t }}</a>
+      <a href="/recipes/search?keyword=indian" class="mobile-nav__link">{{ 'Indian'|t }}</a>
+    {% endif %}
+  </div>
+
+  {# Support #}
+  <div class="mobile-nav__section">
+    <h3 class="mobile-nav__heading">{{ 'Support'|t }}</h3>
+    <a href="/help-center" class="mobile-nav__link">{{ 'Help Center'|t }}</a>
+    <a href="/contact" class="mobile-nav__link">{{ 'Contact Us'|t }}</a>
+    <a href="/privacy-policy" class="mobile-nav__link">{{ 'Privacy Policy'|t }}</a>
+    <a href="/terms-of-service" class="mobile-nav__link">{{ 'Terms of Service'|t }}</a>
+  </div>
+
+  {# Account #}
+  <div class="mobile-nav__section mobile-nav__auth">
+    {% if logged_in %}
+      <a href="{{ path('user.page') }}" class="btn btn--primary btn--lg mobile-nav__btn">{{ 'My Account'|t }}</a>
+      <a href="{{ path('user.logout') }}" class="mobile-nav__link">{{ 'Log out'|t }}</a>
+    {% else %}
+      <a href="{{ path('user.login') }}" class="btn btn--primary btn--lg mobile-nav__btn">{{ 'Sign In'|t }}</a>
+      <a href="{{ path('user.register') }}" class="btn btn--outline btn--lg mobile-nav__btn">{{ 'Create Account'|t }}</a>
+    {% endif %}
+  </div>
+
+</nav>

@@ -1,0 +1,171 @@
+<?php
+
+/**
+ * @file
+ * RecipeBoxx theme functions and preprocessing.
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function recipeboxx_theme_preprocess_html(&$variables) {
+  // Add body classes for specific pages.
+  $route_match = \Drupal::routeMatch();
+  $route_name = $route_match->getRouteName();
+
+  if ($route_name === 'entity.node.canonical') {
+    $node = $route_match->getParameter('node');
+    if ($node && $node->bundle() === 'recipe') {
+      $variables['attributes']['class'][] = 'page-recipe';
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for page.html.twig.
+ */
+function recipeboxx_theme_preprocess_page(&$variables) {
+  // Add front page variable.
+  $variables['is_front'] = \Drupal::service('path.matcher')->isFrontPage();
+  // Make logged_in available to included templates (header, footer).
+  $variables['logged_in'] = \Drupal::currentUser()->isAuthenticated();
+
+  // Load meal type and cuisine type terms for mobile nav categories.
+  $variables['meal_types'] = [];
+  $variables['cuisine_types'] = [];
+
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  $meal_terms = $term_storage->loadByProperties(['vid' => 'meal_type']);
+  foreach ($meal_terms as $term) {
+    $variables['meal_types'][$term->id()] = $term->label();
+  }
+
+  $cuisine_terms = $term_storage->loadByProperties(['vid' => 'cuisine_type']);
+  foreach ($cuisine_terms as $term) {
+    $variables['cuisine_types'][$term->id()] = $term->label();
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for node.html.twig.
+ */
+function recipeboxx_theme_preprocess_node(&$variables) {
+  $node = $variables['node'];
+
+  // Add formatted time for recipes.
+  if ($node->bundle() === 'recipe') {
+    // Calculate total time if not set.
+    if ($node->hasField('field_prep_time') && $node->hasField('field_cook_time')) {
+      $prep_time = $node->get('field_prep_time')->value ?? 0;
+      $cook_time = $node->get('field_cook_time')->value ?? 0;
+      $variables['total_time'] = $prep_time + $cook_time;
+
+      // Format times for display.
+      $variables['prep_time_formatted'] = recipeboxx_theme_format_time($prep_time);
+      $variables['cook_time_formatted'] = recipeboxx_theme_format_time($cook_time);
+      $variables['total_time_formatted'] = recipeboxx_theme_format_time($prep_time + $cook_time);
+    }
+  }
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for field.html.twig.
+ */
+function recipeboxx_theme_preprocess_field(&$variables) {
+  $element = $variables['element'];
+
+  // Add classes based on field name.
+  $field_name = $element['#field_name'];
+  $variables['attributes']['class'][] = 'field--name-' . str_replace('_', '-', $field_name);
+
+  // Special handling for taxonomy term fields.
+  if ($element['#field_type'] === 'entity_reference' && isset($element['#items'])) {
+    $entity = $element['#items']->getEntity();
+    if ($entity && method_exists($entity, 'bundle') && $entity->bundle() === 'recipe') {
+      $variables['attributes']['class'][] = 'recipe-taxonomy';
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function recipeboxx_theme_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Add classes to search forms.
+  if (strpos($form_id, 'search') !== FALSE) {
+    $form['#attributes']['class'][] = 'search';
+    if (isset($form['keys'])) {
+      $form['keys']['#attributes']['class'][] = 'search__input';
+      $form['keys']['#attributes']['placeholder'] = t('Search recipes...');
+    }
+  }
+
+  // Style user login/register forms.
+  if (in_array($form_id, ['user_login_form', 'user_register_form', 'user_pass'])) {
+    $form['#attributes']['class'][] = 'user-form';
+
+    foreach (['name', 'pass', 'mail'] as $field) {
+      if (isset($form[$field])) {
+        $form[$field]['#attributes']['class'][] = 'form-group';
+      }
+    }
+
+    if (isset($form['actions']['submit'])) {
+      $form['actions']['submit']['#attributes']['class'][] = 'btn';
+      $form['actions']['submit']['#attributes']['class'][] = 'btn--primary';
+      $form['actions']['submit']['#attributes']['class'][] = 'btn--lg';
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for page templates.
+ */
+function recipeboxx_theme_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  $route_match = \Drupal::routeMatch();
+
+  // Add page suggestions for node types.
+  if ($node = $route_match->getParameter('node')) {
+    if (is_object($node)) {
+      $suggestions[] = 'page__node__' . $node->bundle();
+    }
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_HOOK_alter() for node templates.
+ */
+function recipeboxx_theme_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  $node = $variables['elements']['#node'];
+  $view_mode = $variables['elements']['#view_mode'];
+
+  // Add view mode based suggestions.
+  $suggestions[] = 'node__' . $node->bundle() . '__' . $view_mode;
+}
+
+/**
+ * Helper function to format time in minutes to a readable string.
+ *
+ * @param int $minutes
+ *   Time in minutes.
+ *
+ * @return string
+ *   Formatted time string.
+ */
+function recipeboxx_theme_format_time($minutes) {
+  if ($minutes < 60) {
+    return $minutes . ' ' . t('min');
+  }
+
+  $hours = floor($minutes / 60);
+  $mins = $minutes % 60;
+
+  if ($mins === 0) {
+    return $hours . ' ' . ($hours === 1 ? t('hour') : t('hours'));
+  }
+
+  return $hours . ' ' . ($hours === 1 ? t('hr') : t('hrs')) . ' ' . $mins . ' ' . t('min');
+}
