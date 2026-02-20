@@ -1015,6 +1015,66 @@ function recipeboxx_recipe_update_9004() {
 }
 
 /**
+ * Remove duplicate taxonomy terms from all recipe vocabularies.
+ */
+function recipeboxx_recipe_update_9005() {
+  $vocabularies = ['cuisine_type', 'meal_type', 'dietary_restriction', 'recipe_tags'];
+  $total_removed = 0;
+
+  $term_storage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+
+  foreach ($vocabularies as $vid) {
+    $terms = $term_storage->loadByProperties(['vid' => $vid]);
+    $seen = [];
+
+    foreach ($terms as $term) {
+      $name = strtolower(trim($term->label()));
+
+      if (isset($seen[$name])) {
+        // This is a duplicate. Reassign any references to the original term.
+        $original_tid = $seen[$name];
+        $duplicate_tid = $term->id();
+
+        // Find all entity reference fields pointing to this duplicate term.
+        $database = \Drupal::database();
+        $tables = [
+          'node__field_cuisine_type',
+          'node__field_meal_type',
+          'node__field_dietary_restrictions',
+          'node__field_recipe_tags',
+          'node_revision__field_cuisine_type',
+          'node_revision__field_meal_type',
+          'node_revision__field_dietary_restrictions',
+          'node_revision__field_recipe_tags',
+        ];
+
+        foreach ($tables as $table) {
+          if ($database->schema()->tableExists($table)) {
+            // Determine the value column name.
+            $field_name = str_replace(['node__', 'node_revision__'], '', $table);
+            $value_column = $field_name . '_target_id';
+
+            $database->update($table)
+              ->fields([$value_column => $original_tid])
+              ->condition($value_column, $duplicate_tid)
+              ->execute();
+          }
+        }
+
+        // Delete the duplicate term.
+        $term->delete();
+        $total_removed++;
+      }
+      else {
+        $seen[$name] = $term->id();
+      }
+    }
+  }
+
+  return t('Removed @count duplicate taxonomy terms.', ['@count' => $total_removed]);
+}
+
+/**
  * Helper function to create static content pages.
  */
 function _recipeboxx_recipe_create_static_pages() {
