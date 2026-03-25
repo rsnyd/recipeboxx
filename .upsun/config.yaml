@@ -40,6 +40,7 @@ applications:
         if [ -n "$(drush status --field=bootstrap)" ]; then
           drush -y cache-rebuild
           drush -y updatedb
+          drush -y entup
           if [ -n "$(ls config/sync/*.yml 2>/dev/null)" ]; then
             drush -y config-import
           else

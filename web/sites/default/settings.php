@@ -898,6 +898,8 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && file_exists(__DIR__ . '/settings.ddev
 #   include $app_root . '/' . $site_path . '/settings.local.php';
 # }
 
+$settings['config_sync_directory'] = '../config/sync';
+
 // Upsun runs behind a reverse proxy; trust forwarded headers for HTTPS.
 if (getenv('PLATFORM_APPLICATION')) {
   $settings['reverse_proxy'] = TRUE;
