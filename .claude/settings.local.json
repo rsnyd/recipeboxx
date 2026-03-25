@@ -43,7 +43,12 @@
       "Bash(wsl.exe -d Ubuntu ddev drush:*)",
       "Bash(~/.bashrc)",
       "Bash(source:*)",
-      "WebFetch(domain:www.qualitas-payroll.co.uk)"
+      "Bash(ssh:*)",
+      "Bash(upsun auth:info:*)",
+      "Bash(upsun ssh-key:list:*)",
+      "Bash(upsun project:list:*)",
+      "Bash(upsun project:info:*)",
+      "Bash(upsun ssh-cert:load:*)"
     ]
   }
 }
